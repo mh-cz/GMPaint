@@ -125,7 +125,6 @@ function tool_fill() {
 	draw_surface(_alpha_surf, 0, 0);
 	
 	if _fill.phase != 0 {
-		
 		draw_surface_ext(_mask_surf, 0, 0, 1, 1, 0, rgba2c(_brush.col, 255), _brush.col[3]);
 	}
 	

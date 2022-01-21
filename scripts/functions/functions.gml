@@ -1,6 +1,6 @@
 function init() {
 	
-	room_speed = 120;
+	room_speed = 60;
 	
 	globalvar _brush;
 	globalvar _layers;
