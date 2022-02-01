@@ -134,6 +134,8 @@ function tool_fill() {
 	
 	/*if _fill.phase != 0 {
 		gpu_set_blendmode_ext(bm_one, bm_inv_src_alpha);
+
+	if _fill.phase != 0 {
 		draw_surface_ext(_mask_surf, 0, 0, 1, 1, 0, rgba2c(_brush.col, 255), _brush.col[3]);
 		gpu_set_blendmode(bm_normal);
 	}*/
