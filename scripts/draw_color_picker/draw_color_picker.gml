@@ -25,12 +25,12 @@ function draw_color_picker() {
 	draw_set_color(c_dkgray);
 	draw_rectangle(px-10, py-10, px+winw, py+winh, false);
 	
-	_col_wheel_surf = check_surf(_col_wheel_surf, diam, diam);
+	_color_wheel.surf = check_surf(_color_wheel.surf, diam, diam);
 	_color_wheel.size_surf = check_surf(_color_wheel.size_surf, diam, diam);
 	
 	shader_set(shd_color_wheel);
 	shader_set_uniform_f(shader_get_uniform(shd_color_wheel, "v"), _color_wheel.v);
-	surface_set_target(_col_wheel_surf);
+	surface_set_target(_color_wheel.surf);
 	draw_surface(_color_wheel.size_surf, 0, 0);
 	surface_reset_target();
 	shader_reset();
@@ -40,7 +40,7 @@ function draw_color_picker() {
 		_color_wheel.pos = [diam/2, diam/2];
 	}
 	
-	draw_surface(_col_wheel_surf, px, py);
+	draw_surface(_color_wheel.surf, px, py);
 	
 	draw_set_color(c_black);
 	draw_set_alpha(0.35);
@@ -93,6 +93,7 @@ function draw_color_picker() {
 	var upper_blue = make_color_rgb(rgb255[0], rgb255[1], 255);
 	
 	var curr_col = make_color_rgb(rgb255[0], rgb255[1], rgb255[2]);
+	var curr_col_full_s = make_color_hsv(_color_wheel.h * 255, 255, _color_wheel.v * 255);
 	
 	draw_set_color(make_color_rgb(255, 100, 100));
 	draw_text(px+diam+13, py+15, "R");
@@ -129,7 +130,7 @@ function draw_color_picker() {
 	_color_wheel.h = h_slider(px+diam+32+175, py+16, 100, 16, _color_wheel.h, "cp_H");
 	input_draw("cp_H", px+diam+32+175+106, py+16-4, mx, my);
 	
-	draw_rectangle_color(px+diam+32+175, py+16*2+10, px+diam+32+175+100, py+16*2+10+16, c_white, curr_col, curr_col, c_white, false);
+	draw_rectangle_color(px+diam+32+175, py+16*2+10, px+diam+32+175+100, py+16*2+10+16, c_white, curr_col_full_s, curr_col_full_s, c_white, false);
 	_color_wheel.s = h_slider(px+diam+32+175, py+16*2+10, 100, 16, _color_wheel.s, "cp_S");
 	input_draw("cp_S", px+diam+32+175+106, py+16*2+10-4, mx, my);
 	

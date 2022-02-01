@@ -144,6 +144,8 @@ function tool_line() {
 		ds_list_clear(list);
 		points_len = 0;
 		_line.grabbed = -1;
+		
+		save_layer(_current_layer);
 	}
 	
 	gpu_set_blendmode(bm_normal);

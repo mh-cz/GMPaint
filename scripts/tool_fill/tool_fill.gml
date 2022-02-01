@@ -11,7 +11,7 @@ function tool_fill() {
 			draw_clear_alpha(c_black, 0);
 			draw_sprite(spr_1px, 0, mouse_x, mouse_y)
 			surface_reset_target();
-		
+			
 			var sc = c2rgba(surface_getpixel_ext(surf, mouse_x, mouse_y));
 			_fill.start_col = [sc[0]/255, sc[1]/255, sc[2]/255, sc[3]/255];
 			_fill.start_pos = [mouse_x, mouse_y];
@@ -26,6 +26,7 @@ function tool_fill() {
 		_fill.comp_surf = check_surf(_fill.comp_surf, w, h);
 		_fill.copy_surf = check_surf(_fill.copy_surf, w, h);
 		_fill.find_col_surf = check_surf(_fill.find_col_surf, w, h);
+		_fill.one_px_surf = check_surf(_fill.one_px_surf, 1, 1);
 		
 		shader_set(shd_flood_fill);
 		shader_set_uniform_f_array(shader_get_uniform(shd_flood_fill, "start_pos"), _fill.start_pos);
@@ -38,7 +39,7 @@ function tool_fill() {
 		
 		if floor(_fill.n) % 5 != 0 {
 			
-			repeat(50) {
+			repeat(25) {
 				surface_set_target(_fill.surf);
 				draw_surface(_mask_surf, 0, 0);
 				surface_reset_target();
@@ -64,15 +65,21 @@ function tool_fill() {
 				
 				shader_set(shd_find_color);
 				shader_set_uniform_f_array(shader_get_uniform(shd_find_color, "texel_size"), [1/w, 1/h]);
-				
 				surface_set_target(_fill.find_col_surf);
 				draw_clear_alpha(c_black, 0);
-				draw_surface_ext(_fill.comp_surf, 0, 0, 1, 1, 0, c_white, 1);
+				draw_surface(_fill.comp_surf, 0, 0);
 				surface_reset_target();
 				shader_reset();
 				
-				var c = c2rgba(surface_getpixel_ext(_fill.find_col_surf, 0, 0));
-				if c[0] == 0 _fill.phase = 2;
+				surface_set_target(_fill.one_px_surf);
+				draw_clear_alpha(c_black, 0);
+				draw_surface(_fill.find_col_surf, 0, 0);
+				surface_reset_target();
+				
+				var buf = buffer_create(1, buffer_grow, 1);
+				buffer_get_surface(buf, _fill.one_px_surf, 0);
+				if buffer_peek(buf, 0, buffer_fast) == 0 _fill.phase = 2;
+				buffer_delete(buf);
 			}
 		}
 		
@@ -103,7 +110,8 @@ function tool_fill() {
 		surface_reset_target();
 		
 		clear_surf([_mask_surf, _draw_surf, _alpha_surf]);
-		free_surf([_fill.surf, _fill.copy_surf, _fill.comp_surf, _fill.find_col_surf]);
+		free_surf([_fill.surf, _fill.copy_surf, _fill.comp_surf, _fill.find_col_surf, _fill.one_px_surf]);
+		save_layer(_current_layer);
 		
 		gpu_set_blendmode(bm_normal);
 	}
@@ -124,10 +132,11 @@ function tool_fill() {
 
 	draw_surface(_alpha_surf, 0, 0);
 	
-	if _fill.phase != 0 {
-		
+	/*if _fill.phase != 0 {
+		gpu_set_blendmode_ext(bm_one, bm_inv_src_alpha);
 		draw_surface_ext(_mask_surf, 0, 0, 1, 1, 0, rgba2c(_brush.col, 255), _brush.col[3]);
-	}
+		gpu_set_blendmode(bm_normal);
+	}*/
 	
 	draw_set_color(c_dkgray);
 	draw_circle(_brush.wmx-1, _brush.wmy-1, _brush.size/2 - 1, true);

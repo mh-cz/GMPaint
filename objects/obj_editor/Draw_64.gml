@@ -12,4 +12,3 @@ if mouse_check_button(mb_left) _mouse_over_gui = !_mouse_started_on_paper;
 
 draw_sprite(_cursor_spr, 0, device_mouse_x_to_gui(0), device_mouse_y_to_gui(0));
 
-
