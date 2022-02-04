@@ -5,7 +5,7 @@ function tool_fill() {
 	var h = surface_get_height(_mask_surf);
 	
 	if device_mouse_check_button_pressed(0, mb_left) and _fill.phase == 0 and !_mouse_over_gui {
-		if _mouse.x > 0 and _mouse.y > 0 and _mouse.x < _resolution.w and _mouse.y < _resolution.h {
+		if _mouse.x > 0 and _mouse.y > 0 and _mouse.x < _paper_res.w and _mouse.y < _paper_res.h {
 			
 			surface_set_target(_mask_surf);
 			draw_clear_alpha(c_black, 0);
@@ -91,7 +91,7 @@ function tool_fill() {
 		draw_clear_alpha(c_black, 0);
 		draw_surface(_mask_surf, 0, 0);
 		gpu_set_colorwriteenable(true, true, true, false);
-		draw_sprite_stretched_ext(spr_1px, 0, 0, 0, _resolution.w, _resolution.h, rgba2c(_brush.col, 255), 1);
+		draw_sprite_stretched_ext(spr_1px, 0, 0, 0, _paper_res.w, _paper_res.h, rgba2c(_brush.col, 255), 1);
 		gpu_set_colorwriteenable(true, true, true, true);
 		gpu_set_blendmode_ext(bm_one, bm_inv_src_alpha);
 		surface_reset_target();

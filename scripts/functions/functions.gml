@@ -5,7 +5,7 @@ function init() {
 	globalvar _brush;
 	globalvar _layers;
 	globalvar _current_layer;
-	globalvar _resolution;
+	globalvar _paper_res;
 	globalvar _mask_surf;
 	globalvar _alpha_surf;
 	globalvar _draw_surf;
@@ -27,20 +27,21 @@ function init() {
 	
 	enum _tools { none = -1, brush = 0, line = 1, fill = 2, eraser = 3 };
 	
-	_resolution = { w: 1280, h: 720 };
+	_paper_res = { w: 1280, h: 720 };
 	screen = { w: window_get_width(), h: window_get_height() };
 	
 	_tool_current = _tools.brush;
 	_layers = ds_list_create();
-	_current_layer = layer_add(_resolution.w, _resolution.h, c_grey, 1);
+	_current_layer = layer_add(_paper_res.w, _paper_res.h, c_grey, 1);
 	
-	_brush = { size: 19, brush_surf: -1, size_surf: -1, col: [1, 1, 1, 1], falloff: 1, tex: -1, tex_mask: -1,
-			   step: 0, step_scale: .1, weight: 0.1, wmx: 0, wmy: 0, pmx: 0, pmy: 0, pwmx: 0, pwmy: 0, 
+	_brush = { size: 100, brush_surf: -1, size_surf: -1, col: [1, 1, 1, 1], falloff: 0.5, tex: -1, tex_mask: -1,
+			   step: 0, step_scale: .1, weight: 1, wmx: 0, wmy: 0, pmx: 0, pmy: 0, pwmx: 0, pwmy: 0, 
 			   pds_wm: 0, pdr_wm: 0, pds_m: 0, pdr_m: 0, moved: false };
 	
 	_line = { points_list: ds_list_create(), grabbed: -1, tension: 0, closed: false };
 	
-	_fill = { surf: -1, comp_surf: -1, copy_surf: -1, find_col_surf: -1, one_px_surf: -1, tol: 100, phase: 0, start_col: [0,0,0,0], start_pos: [0,0] };
+	_fill = { surf: -1, comp_surf: -1, copy_surf: -1, find_col_surf: -1, one_px_surf: -1,
+			  tol: 100, phase: 0, start_col: [0,0,0,0], start_pos: [0,0] };
 	
 	_mask_surf = -1;
 	_draw_surf = -1;
@@ -48,12 +49,12 @@ function init() {
 	_brush_surf = -1;
 	_img_ovr_surf = -1;
 	
-	_color_wheel = { surf: -1, size_surf: -1, h: 0, s: 0, v: 1, r: 1, g: 1, b: 1, a: 1, hex: "#FFFFFF", pos: [-1, -1], msi: false, 
-					 prev_rgba: [1, 1, 1, 1], wy: -0.5 };
+	_color_wheel = { surf: -1, size_surf: -1, h: 0, s: 0, v: 1, r: 1, g: 1, b: 1, a: 1, hex: "#FFFFFF",
+					 pos: [-1, -1], msi: false, prev_rgba: [1, 1, 1, 1], wy: -0.5 };
 	
 	set_camera();
-	cam_x = _resolution.w/2;
-	cam_y = _resolution.h/2;
+	cam_x = _paper_res.w/2;
+	cam_y = _paper_res.h/2;
 	cam_prev_mouse_pos = 0;
 	_zoom = 1;
 	
@@ -71,6 +72,7 @@ function init() {
 	_selected_slider = "";
 	
 	foreach_init();
+	apply_window_resize();
 	
 	_filename = "new_paper";
 	_filename_ext = ".gmp";
@@ -105,6 +107,14 @@ function prem_c(c, a) {
 
 function set_camera() {
 	view_camera[0] = camera_create_view(0, 0, view_wport[0], view_hport[0], 0, noone, -1, -1, -1, -1);
+}
+
+function window_resize() {
+	screen.w = window_get_width();
+	screen.h = window_get_height();
+	view_set_wport(0, screen.w);
+	view_set_hport(0, screen.h);
+	display_set_gui_size(screen.w, screen.h);	
 }
 
 function clear_surf(s) {

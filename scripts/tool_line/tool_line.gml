@@ -82,9 +82,9 @@ function line_circle_intersection(x1, y1, x2, y2, cx, cy, rad) {
     return dot_product(h1, h2, h1, h2) <= rad * rad
 }
 
-function draw_circle_ext(x, y, r, w, s) {
+function draw_circle_ext(x, y, r, w, seg) {
 	
-	var step = 360/s;
+	var step = 360/seg;
 	draw_primitive_begin(pr_trianglestrip);
 	for (var i = 0; i <= 360; i += step)
 	{
@@ -121,7 +121,7 @@ function tool_line() {
 	draw_surface(_mask_surf, 0, 0);
 	gpu_set_blendmode(bm_normal);
 	gpu_set_colorwriteenable(true, true, true, false);
-	draw_sprite_stretched_ext(spr_1px, 0, 0, 0, _resolution.w, _resolution.h, rgba2c(_brush.col, 255), 1);
+	draw_sprite_stretched_ext(spr_1px, 0, 0, 0, _paper_res.w, _paper_res.h, rgba2c(_brush.col, 255), 1);
 	gpu_set_colorwriteenable(true, true, true, true);
 	gpu_set_blendmode_ext(bm_one, bm_inv_src_alpha);
 	surface_reset_target();

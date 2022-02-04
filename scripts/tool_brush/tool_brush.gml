@@ -30,7 +30,7 @@ function tool_brush() {
 		draw_surface(_mask_surf, 0, 0);
 		gpu_set_blendmode(bm_normal);
 		gpu_set_colorwriteenable(true, true, true, false);
-		draw_sprite_stretched_ext(spr_1px, 0, 0, 0, _resolution.w, _resolution.h, rgba2c(_brush.col, 255), 1);
+		draw_sprite_stretched_ext(spr_1px, 0, 0, 0, _paper_res.w, _paper_res.h, rgba2c(_brush.col, 255), 1);
 		gpu_set_colorwriteenable(true, true, true, true);
 		gpu_set_blendmode_ext(bm_one, bm_inv_src_alpha);
 		surface_reset_target();

@@ -12,6 +12,7 @@
     {"id":{"name":"spr_alpha","path":"sprites/spr_alpha/spr_alpha.yy",},"order":5,},
     {"id":{"name":"input_draw","path":"scripts/input_draw/input_draw.yy",},"order":7,},
     {"id":{"name":"spr_slider_rider","path":"sprites/spr_slider_rider/spr_slider_rider.yy",},"order":7,},
+    {"id":{"name":"surf2buff","path":"scripts/surf2buff/surf2buff.yy",},"order":5,},
     {"id":{"name":"tool_eraser","path":"scripts/tool_eraser/tool_eraser.yy",},"order":14,},
     {"id":{"name":"shd_find_color","path":"shaders/shd_find_color/shd_find_color.yy",},"order":4,},
     {"id":{"name":"saving_loading","path":"scripts/saving_loading/saving_loading.yy",},"order":13,},

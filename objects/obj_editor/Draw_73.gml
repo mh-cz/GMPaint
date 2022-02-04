@@ -1,4 +1,4 @@
-var off = 1 - (_brush.size % 2);
+var off = (_brush.size % 2 == 1) ? 0.5 : 1;
 
 switch(_tool_current) {
 	
@@ -17,12 +17,12 @@ switch(_tool_current) {
 			draw_surface(_brush.brush_surf, _mouse.x - _brush.size div 2, _mouse.y - _brush.size div 2);
 			gpu_set_blendmode(bm_normal);
 		}
-	
-		draw_set_color(c_dkgray);
-		draw_rectangle(0, 0, _resolution.w - 1, _resolution.h - 1, true);
+		
+		draw_set_color(c_black);
+		draw_rectangle(0, 0, _paper_res.w - 1, _paper_res.h - 1, true);
 		draw_rectangle(_mouse.x, _mouse.y, _mouse.x, _mouse.y, true);
-		draw_circle(_brush.wmx - off, _brush.wmy - off, _brush.size div 2, true);
-
-		if _brush.weight < 0.5 draw_line(_mouse.x - 0.5, _mouse.y - 0.5, _brush.wmx - 0.5, _brush.wmy - 0.5);
+		draw_circle(_brush.wmx - off, _brush.wmy - off, _brush.size/2, true);
+		
+		if _brush.weight < 0.5 draw_line(_mouse.x - off, _mouse.y - off, _brush.wmx - off, _brush.wmy - off);
 		break;
 }
