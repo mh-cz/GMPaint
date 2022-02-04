@@ -25,7 +25,7 @@ bool is_around(sampler2D img, vec4 start_col, float tol) {
 	bool left = true;
 	bool right = true;
 	
-	for(float i = 1.; i < 30.; i++) {
+	for(float i = 0.; i < 50.; i++) {
 		if(up) {
 			if(!ok_tol(texture2D(img, v_vTexcoord + vec2(0., texel_size.y * i)), start_col, tol)) up = false;
 			else if(texture2D(gm_BaseTexture, v_vTexcoord + vec2(0., texel_size.y * i)).a != 0.) { ok = true; break; }
@@ -35,11 +35,11 @@ bool is_around(sampler2D img, vec4 start_col, float tol) {
 			else if(texture2D(gm_BaseTexture, v_vTexcoord + vec2(0., -texel_size.y * i)).a != 0.) { ok = true; break; }
 		}
 		if(right) {
-			if(!ok_tol(texture2D(img, v_vTexcoord + vec2(texel_size.y * i, 0.)), start_col, tol)) right = false;
+			if(!ok_tol(texture2D(img, v_vTexcoord + vec2(texel_size.x * i, 0.)), start_col, tol)) right = false;
 			else if(texture2D(gm_BaseTexture, v_vTexcoord + vec2(texel_size.x * i, 0.)).a != 0.) { ok = true; break; }	
 		}
 		if(left) {
-			if(!ok_tol(texture2D(img, v_vTexcoord + vec2(-texel_size.y * i, 0.)), start_col, tol)) left = false;
+			if(!ok_tol(texture2D(img, v_vTexcoord + vec2(-texel_size.x * i, 0.)), start_col, tol)) left = false;
 			else if(texture2D(gm_BaseTexture, v_vTexcoord + vec2(-texel_size.x * i, 0.)).a != 0.) { ok = true; break; }	
 		}
 	}

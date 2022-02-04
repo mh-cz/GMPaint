@@ -30,4 +30,6 @@ function save_layer(i = _current_layer) {
 	buffer_save(buf, _filename + "/layer." + string(i));
 	
 	buffer_delete(buf);
+	
+	show_debug_message(["saved", i])
 }

@@ -5,16 +5,16 @@ function tool_fill() {
 	var h = surface_get_height(_mask_surf);
 	
 	if device_mouse_check_button_pressed(0, mb_left) and _fill.phase == 0 and !_mouse_over_gui {
-		if mouse_x > 0 and mouse_y > 0 and mouse_x < _resolution.w and mouse_y < _resolution.h {
+		if _mouse.x > 0 and _mouse.y > 0 and _mouse.x < _resolution.w and _mouse.y < _resolution.h {
 			
 			surface_set_target(_mask_surf);
 			draw_clear_alpha(c_black, 0);
-			draw_sprite(spr_1px, 0, mouse_x, mouse_y)
+			draw_sprite(spr_1px, 0, _mouse.x, _mouse.y)
 			surface_reset_target();
 			
-			var sc = c2rgba(surface_getpixel_ext(surf, mouse_x, mouse_y));
+			var sc = c2rgba(surface_getpixel_ext(surf, _mouse.x, _mouse.y));
 			_fill.start_col = [sc[0]/255, sc[1]/255, sc[2]/255, sc[3]/255];
-			_fill.start_pos = [mouse_x, mouse_y];
+			_fill.start_pos = [_mouse.x, _mouse.y];
 			_fill.phase = 1;
 			_fill.n = 1;
 		}
@@ -36,32 +36,29 @@ function tool_fill() {
 		texture_set_stage(shader_get_sampler_index(shd_flood_fill, "img"), surface_get_texture(_layers[| _current_layer].s));
 		
 		if _fill.n > 1 surface_copy(_fill.copy_surf, 0, 0, _mask_surf);
-		
-		if floor(_fill.n) % 5 != 0 {
 			
-			repeat(25) {
-				surface_set_target(_fill.surf);
-				draw_surface(_mask_surf, 0, 0);
-				surface_reset_target();
-				surface_set_target(_mask_surf);
-				draw_surface(_fill.surf, 0, 0);
-				surface_reset_target();
-			}
+		repeat(20) {
+			surface_set_target(_fill.surf);
+			draw_surface(_mask_surf, 0, 0);
+			surface_reset_target();
+			surface_set_target(_mask_surf);
+			draw_surface(_fill.surf, 0, 0);
+			surface_reset_target();
 		}
 		
 		shader_reset();
 		
-		if _fill.n > 1 {
+		if _fill.n > 0 {
 			
-			shader_set(shd_compare_surfaces);
-			texture_set_stage(shader_get_sampler_index(shd_compare_surfaces, "img1"), surface_get_texture(_fill.copy_surf));
-			texture_set_stage(shader_get_sampler_index(shd_compare_surfaces, "img2"), surface_get_texture(_mask_surf));
-			surface_set_target(_fill.comp_surf);
-			draw_surface(_fill.surf, 0, 0);
-			surface_reset_target();
-			shader_reset();
+			if floor(_fill.n) % 2 == 1 {
 			
-			if floor(_fill.n) % 5 == 0 {
+				shader_set(shd_compare_surfaces);
+				texture_set_stage(shader_get_sampler_index(shd_compare_surfaces, "img1"), surface_get_texture(_fill.copy_surf));
+				texture_set_stage(shader_get_sampler_index(shd_compare_surfaces, "img2"), surface_get_texture(_mask_surf));
+				surface_set_target(_fill.comp_surf);
+				draw_surface(_fill.surf, 0, 0);
+				surface_reset_target();
+				shader_reset();
 				
 				shader_set(shd_find_color);
 				shader_set_uniform_f_array(shader_get_uniform(shd_find_color, "texel_size"), [1/w, 1/h]);
@@ -88,6 +85,7 @@ function tool_fill() {
 	else if _fill.phase == 2 {
 		
 		_fill.phase = 0;
+		_fill.n = 0;
 		
 		surface_set_target(_draw_surf);
 		draw_clear_alpha(c_black, 0);
@@ -114,35 +112,7 @@ function tool_fill() {
 		save_layer(_current_layer);
 		
 		gpu_set_blendmode(bm_normal);
+		
+		save_layer();
 	}
-	
-	#region      /////////////////      DRAW      /////////////////
-
-	for(var i = 0; i < ds_list_size(_layers); i++) {
-		var layer_data = _layers[| i];
-		layer_data.s = check_surf(layer_data.s, _resolution.w, _resolution.h, layer_data.c, layer_data.a);
-	
-		gpu_set_blendmode_ext(bm_one, bm_inv_src_alpha);
-		draw_surface(layer_data.s, 0, 0);
-		gpu_set_blendmode(bm_normal);
-	}
-
-	draw_set_color(c_dkgray);
-	draw_rectangle(0, 0, _resolution.w - 1, _resolution.h - 1, true);
-
-	draw_surface(_alpha_surf, 0, 0);
-	
-	/*if _fill.phase != 0 {
-		gpu_set_blendmode_ext(bm_one, bm_inv_src_alpha);
-
-	if _fill.phase != 0 {
-		draw_surface_ext(_mask_surf, 0, 0, 1, 1, 0, rgba2c(_brush.col, 255), _brush.col[3]);
-		gpu_set_blendmode(bm_normal);
-	}*/
-	
-	draw_set_color(c_dkgray);
-	draw_circle(_brush.wmx-1, _brush.wmy-1, _brush.size/2 - 1, true);
-	draw_set_color(c_white);
-	
-	#endregion
 }

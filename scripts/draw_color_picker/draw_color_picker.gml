@@ -12,15 +12,16 @@ function draw_color_picker() {
 	var mx = device_mouse_x_to_gui(0);
 	var my = device_mouse_y_to_gui(0);
 	
-	if point_in_rectangle(mx, my, px, py-30, px+winw, py+winh+200)
+	if !_mouse_started_on_paper
+	and (point_in_rectangle(mx, my, px, py-30, px+winw, py+winh+200)
 	or point_in_rectangle(mx, my, -200, display_get_gui_height() - 20 - 64, px+64, display_get_gui_height()+200)
-	or string_pos("cp_", _selected_slider + _selected_input) != 0 or _color_wheel.msi {
+	or string_pos("cp_", _selected_slider + _selected_input) != 0 or _color_wheel.msi) {
 		_mouse_over_gui = true;
 		_color_wheel.wy = lerp(_color_wheel.wy, 1, 0.1);
 	}
 	else _color_wheel.wy = lerp(_color_wheel.wy, -0.5, 0.1);
 	
-	draw_sprite_ext(spr_rgb_wheel_64, 0, px-10, display_get_gui_height() - 20 - 64, 1, 1, 0, c_white, 1 - clamp(_color_wheel.wy, 0, 1));
+	draw_sprite_ext(spr_rgb_wheel_64, 0, px-10, display_get_gui_height() - 120 - _color_wheel.wy * off * 0.5, 1, 1, 0, c_white, 1 - clamp(_color_wheel.wy, 0, 1));
 	
 	draw_set_color(c_dkgray);
 	draw_rectangle(px-10, py-10, px+winw, py+winh, false);

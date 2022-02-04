@@ -23,8 +23,9 @@ function init() {
 	globalvar _selected_input;
 	globalvar _filename;
 	globalvar _filename_ext;
+	globalvar _mouse;
 	
-	enum _tools { none = -1, brush = 0, line = 1, fill = 2, erase = 3 };
+	enum _tools { none = -1, brush = 0, line = 1, fill = 2, eraser = 3 };
 	
 	_resolution = { w: 1280, h: 720 };
 	screen = { w: window_get_width(), h: window_get_height() };
@@ -33,8 +34,8 @@ function init() {
 	_layers = ds_list_create();
 	_current_layer = layer_add(_resolution.w, _resolution.h, c_grey, 1);
 	
-	_brush = { size: 1, predraw_surf: -1, size_surf: -1, col: [1, 1, 1, 1], falloff: 15, tex: -1, tex_mask: -1,
-			   step: .1, step_scale: .1, weight: 1, wmx: 0, wmy: 0, pmx: 0, pmy: 0, pwmx: 0, pwmy: 0, 
+	_brush = { size: 19, brush_surf: -1, size_surf: -1, col: [1, 1, 1, 1], falloff: 1, tex: -1, tex_mask: -1,
+			   step: 0, step_scale: .1, weight: 0.1, wmx: 0, wmy: 0, pmx: 0, pmy: 0, pwmx: 0, pwmy: 0, 
 			   pds_wm: 0, pdr_wm: 0, pds_m: 0, pdr_m: 0, moved: false };
 	
 	_line = { points_list: ds_list_create(), grabbed: -1, tension: 0, closed: false };
@@ -48,16 +49,18 @@ function init() {
 	_img_ovr_surf = -1;
 	
 	_color_wheel = { surf: -1, size_surf: -1, h: 0, s: 0, v: 1, r: 1, g: 1, b: 1, a: 1, hex: "#FFFFFF", pos: [-1, -1], msi: false, 
-					 prev_rgba: [1, 1, 1, 1], wy: 0, };
+					 prev_rgba: [1, 1, 1, 1], wy: -0.5 };
 	
 	set_camera();
 	cam_x = _resolution.w/2;
 	cam_y = _resolution.h/2;
 	cam_prev_mouse_pos = 0;
-	_zoom = 2;
+	_zoom = 1;
+	
+	_mouse = { x: 0, y: 0, xfloat: 0, yfloat: 0 };
 	
 	set_cursor(spr_cursor_cross);
-	draw_set_circle_precision(50);
+	draw_set_circle_precision(32);
 	
 	_mouse_over_gui = false;
 	_mouse_started_on_paper = false;
@@ -70,7 +73,14 @@ function init() {
 	foreach_init();
 	
 	_filename = "new_paper";
-	_filename_ext = ".gmpaint";
+	_filename_ext = ".gmp";
+}
+
+function get_mouse_pos() {
+	_mouse.xfloat = device_mouse_x_to_gui(0) * _zoom + camera_get_view_x(view_camera[0]);
+	_mouse.yfloat = device_mouse_y_to_gui(0) * _zoom + camera_get_view_y(view_camera[0]);
+	_mouse.x = floor(_mouse.xfloat);
+	_mouse.y = floor(_mouse.yfloat);
 }
 
 function set_cursor(spr) {

@@ -2,18 +2,18 @@
 
 if mouse_check_button(mb_middle) {
 	
-	if !is_array(cam_prev_mouse_pos) cam_prev_mouse_pos = [mouse_x, mouse_y];
+	if !is_array(cam_prev_mouse_pos) cam_prev_mouse_pos = [_mouse.x, _mouse.y];
 	
-	cam_x += cam_prev_mouse_pos[0] - mouse_x;
-	cam_y += cam_prev_mouse_pos[1] - mouse_y;
+	cam_x += cam_prev_mouse_pos[0] - _mouse.x;
+	cam_y += cam_prev_mouse_pos[1] - _mouse.y;
 }
 else cam_prev_mouse_pos = 0;
 
 var wheel = mouse_wheel_down() - mouse_wheel_up();
 
 _zoom += wheel * 0.2 * _zoom;
-cam_x += (cam_x - mouse_x) * (wheel * 0.2);
-cam_y += (cam_y - mouse_y) * (wheel * 0.2);
+cam_x += (cam_x - _mouse.x) * (wheel * 0.2);
+cam_y += (cam_y - _mouse.y) * (wheel * 0.2);
 
 _zoom = clamp(_zoom, 0.02, 3);
 cam_x = clamp(cam_x, -screen.w * 0.25, _resolution.w + screen.w * 0.25);
