@@ -1,16 +1,16 @@
 var off = (_brush.size % 2 == 1) ? 0.5 : 1;
 
-switch(_tool_current) {
+switch(_current_tool) {
 	
-	case _tools.fill:
+	case _tool.fill:
 	
 		draw_set_color(rgba2c(_brush.col, 255));
 		draw_rectangle(_mouse.x, _mouse.y, _mouse.x, _mouse.y, false);
 		break;
 	
-	case _tools.brush:
-	case _tools.eraser:
-	case _tools.line:
+	case _tool.brush:
+	case _tool.eraser:
+	case _tool.line:
 	
 		if !mouse_check_button(mb_left) and surface_exists(_brush.brush_surf) {
 			gpu_set_blendmode_ext(bm_one, bm_inv_src_alpha);

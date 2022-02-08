@@ -8,6 +8,7 @@ _mouse_over_gui = false;
 
 draw_toolbar(35, 35, 2);
 draw_color_picker();
+draw_layer_select(screen.w - _layer_select.w - 15, screen.h - _layer_select.h - 15);
 
 if mouse_check_button_pressed(mb_left) _mouse_started_on_paper = !_mouse_over_gui;
 if mouse_check_button(mb_left) _mouse_over_gui = !_mouse_started_on_paper;

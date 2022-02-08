@@ -73,7 +73,7 @@ function tool_fill() {
 				draw_surface(_fill.find_col_surf, 0, 0);
 				surface_reset_target();
 				
-				var buf = buffer_create(1, buffer_grow, 1);
+				var buf = buffer_create(1, buffer_fixed, 1);
 				buffer_get_surface(buf, _fill.one_px_surf, 0);
 				if buffer_peek(buf, 0, buffer_fast) == 0 _fill.phase = 2;
 				buffer_delete(buf);

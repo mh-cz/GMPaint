@@ -11,25 +11,30 @@ for(var i = 0; i < ds_list_size(_layers); i++) {
 }
 gpu_set_blendmode(bm_normal);
 
-switch(_tool_current) {
+switch(_current_tool) {
 	
-	case _tools.brush:
+	case _tool.brush:
 		tool_brush();
 		//options_brush();
 		break;
 		
-	case _tools.line:
+	case _tool.line:
 		tool_line();
 		//options_line();
 		break;
 		
-	case _tools.fill:
+	case _tool.fill:
 		tool_fill();
 		//options_fill();
 		break;
 	
-	case _tools.eraser:
+	case _tool.eraser:
 		tool_eraser();
-		//options_fill();
+		//options_eraser();
+		break;
+
+	case _tool.pipette:
+		tool_pipette();
+		//options_pipette();
 		break;
 }

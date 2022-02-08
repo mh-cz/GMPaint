@@ -22,6 +22,7 @@
     {"id":{"name":"scr_sliders","path":"scripts/scr_sliders/scr_sliders.yy",},"order":10,},
     {"id":{"name":"draw_toolbar","path":"scripts/draw_toolbar/draw_toolbar.yy",},"order":4,},
     {"id":{"name":"tool_line","path":"scripts/tool_line/tool_line.yy",},"order":2,},
+    {"id":{"name":"tool_pipette","path":"scripts/tool_pipette/tool_pipette.yy",},"order":15,},
     {"id":{"name":"spr_hue","path":"sprites/spr_hue/spr_hue.yy",},"order":8,},
     {"id":{"name":"spr_rgb_wheel_64","path":"sprites/spr_rgb_wheel_64/spr_rgb_wheel_64.yy",},"order":9,},
     {"id":{"name":"spr_cursor_cross","path":"sprites/spr_cursor_cross/spr_cursor_cross.yy",},"order":2,},

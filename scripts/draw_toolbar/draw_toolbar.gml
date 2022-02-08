@@ -13,7 +13,7 @@ function draw_toolbar(x, y, max_xc) {
 		var pds = point_distance(device_mouse_x_to_gui(0), device_mouse_y_to_gui(0), xx, yy);
 		
 		var s = pds < 120 ? clamp((120 - pds) * 0.011, 1, 1.2) : 1;
-		var c = _tool_current == i ? c_lime : c_white;
+		var c = _current_tool == i ? c_lime : c_white;
 		
 		draw_sprite_ext(spr_toolbar_icon_ramecek, i, xx, yy, s, s, 0, c, 0.75);
 		draw_sprite_ext(spr_toolbar_icons, i, xx, yy, s, s, 0, c, 1);
@@ -22,7 +22,8 @@ function draw_toolbar(x, y, max_xc) {
 			_mouse_over_gui = true;
 			
 			if device_mouse_check_button_pressed(0, mb_left) {
-				_tool_current = i;
+				on_switch_tool(i);
+				_current_tool = i;
 			}
 		}
 		
