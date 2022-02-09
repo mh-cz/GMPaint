@@ -1,6 +1,5 @@
 function tool_fill() {
 	
-	var surf = _layers[| _current_layer].s;
 	var w = surface_get_width(_mask_surf);
 	var h = surface_get_height(_mask_surf);
 	
@@ -12,11 +11,12 @@ function tool_fill() {
 			draw_sprite(spr_1px, 0, _mouse.x, _mouse.y)
 			surface_reset_target();
 			
-			var sc = c2rgba(surface_getpixel_ext(surf, _mouse.x, _mouse.y));
+			var sc = c2rgba(surface_getpixel_ext(_layers[| _current_layer].s, _mouse.x, _mouse.y));
 			_fill.start_col = [sc[0]/255, sc[1]/255, sc[2]/255, sc[3]/255];
 			_fill.start_pos = [_mouse.x, _mouse.y];
 			_fill.phase = 1;
 			_fill.n = 1;
+			_fill.buf = buffer_create(4, buffer_fixed, 1);
 		}
 	}
 	
@@ -36,8 +36,8 @@ function tool_fill() {
 		texture_set_stage(shader_get_sampler_index(shd_flood_fill, "img"), surface_get_texture(_layers[| _current_layer].s));
 		
 		if _fill.n > 1 surface_copy(_fill.copy_surf, 0, 0, _mask_surf);
-			
-		repeat(20) {
+		
+		repeat(50) {
 			surface_set_target(_fill.surf);
 			draw_surface(_mask_surf, 0, 0);
 			surface_reset_target();
@@ -73,10 +73,8 @@ function tool_fill() {
 				draw_surface(_fill.find_col_surf, 0, 0);
 				surface_reset_target();
 				
-				var buf = buffer_create(1, buffer_fixed, 1);
-				buffer_get_surface(buf, _fill.one_px_surf, 0);
-				if buffer_peek(buf, 0, buffer_fast) == 0 _fill.phase = 2;
-				buffer_delete(buf);
+				buffer_get_surface(_fill.buf, _fill.one_px_surf, 0);
+				if buffer_peek(_fill.buf, 0, buffer_fast) < 0.1 _fill.phase = 2;
 			}
 		}
 		
@@ -86,6 +84,7 @@ function tool_fill() {
 		
 		_fill.phase = 0;
 		_fill.n = 0;
+		buffer_delete(_fill.buf);
 		
 		surface_set_target(_draw_surf);
 		draw_clear_alpha(c_black, 0);
@@ -98,7 +97,7 @@ function tool_fill() {
 		
 		surface_set_target(_alpha_surf);
 		draw_clear_alpha(c_black, 0);
-		draw_surface_ext(_draw_surf, 0, 0, 1, 1, 0, c_white, clamp(_brush.col[3] * 1.5, 0, 1));
+		draw_surface_ext(_draw_surf, 0, 0, 1, 1, 0, c_white, _brush.col[3]);
 		surface_reset_target();
 		
 		surface_set_target(_layers[| _current_layer].s);

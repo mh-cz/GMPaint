@@ -51,8 +51,8 @@ void main() {
 	vec4 c = vec4(0.);
 	vec4 img_col = texture2D(img, v_vTexcoord);
 	
-	if (texture2D(gm_BaseTexture, v_vTexcoord).a != 0. || (ok_tol(img_col, start_col, tolerance) && is_around(img, start_col, tolerance))) {
-		c = vec4(vec3(get_brightness(img_col.rgb)), img_col.a);
+	if (ok_tol(img_col, start_col, tolerance) && is_around(img, start_col, tolerance)) {
+		c = vec4(vec3(get_brightness(img_col.rgb)), 1.);
 	}
 	
     gl_FragColor = c;

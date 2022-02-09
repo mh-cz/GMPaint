@@ -37,7 +37,7 @@ function tool_brush() {
 		
 		surface_set_target(_alpha_surf);
 		draw_clear_alpha(c_black, 0);
-		draw_surface_ext(_draw_surf, 0, 0, 1, 1, 0, c_white, clamp(_brush.col[3] * 1.5, 0, 1));
+		draw_surface_ext(_draw_surf, 0, 0, 1, 1, 0, c_white, _brush.col[3]);
 		surface_reset_target();
 	}
 	

@@ -14,7 +14,8 @@ switch(_current_tool) {
 	
 		if !mouse_check_button(mb_left) and surface_exists(_brush.brush_surf) {
 			gpu_set_blendmode_ext(bm_one, bm_inv_src_alpha);
-			draw_surface(_brush.brush_surf, _mouse.x - _brush.size div 2, _mouse.y - _brush.size div 2);
+			draw_surface_ext(_brush.brush_surf, _mouse.x - _brush.size div 2, _mouse.y - _brush.size div 2,
+							 1, 1, 0, rgba2c(_brush.col, 255, true), _brush.col[3]);
 			gpu_set_blendmode(bm_normal);
 		}
 		

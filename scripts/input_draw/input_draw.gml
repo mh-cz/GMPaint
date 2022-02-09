@@ -82,7 +82,7 @@ function input_draw(input_id, x, y, mx, my) {
 	
 		if device_mouse_check_button_pressed(0, mb_left) {
 			_selected_input = "";
-			s.has_focus = point_in_rectangle(mx, my, x, y, x + s.input_w, y + s.input_h);
+			s.has_focus = point_in_rectangle(mx, my, x, y, x + s.input_w, y + s.input_h) and _mouse_over_gui;
 		}
 		
 		var slen = string_length(s.str);

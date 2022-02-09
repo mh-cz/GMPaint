@@ -30,6 +30,10 @@ function init() {
 	
 	enum _tool { none = -1, brush = 0, line = 1, fill = 2, eraser = 3, pipette = 4, area_select = 5 };
 	
+	input_init();
+	make_inputs();
+	foreach_init();
+	
 	_paper_res = { w: 1280, h: 720 };
 	screen = { w: window_get_width(), h: window_get_height() };
 	
@@ -38,16 +42,16 @@ function init() {
 	_layer_id_counter = 0;
 	_current_layer = layer_add(c_grey, 1);
 	
-	_layer_select = { surf: -1, w: 200, h: 400, ypos: 0 };
+	_layer_select = { surf: -1, w: 200, h: 400, ypos: 0, ypos_smooth: 0 };
 	
-	_brush = { size: 20, brush_surf: -1, size_surf: -1, col: [1, 1, 1, 1], falloff: 1, tex: -1, tex_mask: -1,
+	_brush = { size: 20, brush_surf: -1, size_surf: -1, col: [1, 1, 1, 1], falloff: 1.2, tex: -1, tex_mask: -1,
 			   step: 0, step_scale: .15, weight: 1, wmx: 0, wmy: 0, pwmx: 0, pwmy: 0, 
 			   pds_wm: 0, pdr_wm: 0, moved: false };
 	
 	_line = { points_list: ds_list_create(), grabbed: -1, tension: 0, closed: false };
 	
 	_fill = { surf: -1, comp_surf: -1, copy_surf: -1, find_col_surf: -1, one_px_surf: -1,
-			  tol: 10, phase: 0, start_col: [0,0,0,0], start_pos: [0,0] };
+			  tol: 10, phase: 0, start_col: [0,0,0,0], start_pos: [0,0], buf: -1 };
 	
 	_pipette = { buf_list: ds_list_create() };
 	
@@ -68,19 +72,16 @@ function init() {
 	
 	_mouse = { x: 0, y: 0, xfloat: 0, yfloat: 0 };
 	
-	set_cursor(spr_cursor_cross);
 	draw_set_circle_precision(32);
 	
 	_mouse_over_gui = false;
 	_mouse_started_on_paper = false;
 	
-	input_init();
-	make_inputs();
 	_selected_input = "";
 	_selected_slider = "";
 	
-	foreach_init();
 	window_resize();
+	set_cursor(spr_cursor, 1);
 	
 	_filename = "new_paper";
 	_file_ext = ".gmp";
@@ -93,9 +94,9 @@ function get_mouse_pos() {
 	_mouse.y = floor(_mouse.yfloat);
 }
 
-function set_cursor(spr) {
+function set_cursor(spr, img) {
 	window_set_cursor(cr_none);
-	_cursor_spr = spr;
+	_cursor_spr = [spr, img];
 }
 
 function c2rgba(c) {
@@ -122,6 +123,7 @@ function window_resize() {
 	view_wport[0] = screen.w;
 	view_hport[0] = screen.h;
 	display_set_gui_size(screen.w, screen.h);	
+	surface_resize(application_surface, screen.w, screen.h);
 }
 
 function clear_surf(s) {
@@ -151,11 +153,17 @@ function layer_add(col = c_black, alpha = 0) {
 	_layer_id_counter++;
 	var pos = ds_list_size(_layers);
 	
-	ds_list_add(_layers, { s: check_surf(-1, _paper_res.w, _paper_res.h, col, alpha), c: col, a: alpha, l_id: _layer_id_counter, name: string(pos) });
+	ds_list_add(_layers, { s: check_surf(-1, _paper_res.w, _paper_res.h, col, alpha), c: col, a: alpha,
+				l_id: _layer_id_counter, name: string(pos), hidden: false, layer_alpha: 1 });
+	
 	input_copy("layer name", "LNAME_"+string(_layer_id_counter));
 	input_set_text("LNAME_"+string(_layer_id_counter), string(pos));
 	
 	return pos;
+}
+
+function layer_delete(l) {
+	ds_list_delete(_layers, l);
 }
 
 function check_surf(s, w, h, c = c_black, a = 0) {
