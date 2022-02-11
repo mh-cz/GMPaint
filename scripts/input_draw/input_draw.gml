@@ -289,6 +289,9 @@ function input_draw(input_id, x, y, mx, my) {
 		}
 	}
 	else show_debug_message("Unknown input ID: " + input_id);
+	
+	draw_set_color(c_dkgray);
+	draw_rectangle(x, y, x+s.input_w-1, y+s.input_h-1, true);
 }
 
 /// input_copy(input_id, new_input_id)

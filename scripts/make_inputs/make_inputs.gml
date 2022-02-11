@@ -10,6 +10,7 @@ function make_inputs() {
 	input_set_focused_bkg_color("3 numbers", c2);
 	input_set_dimensions("3 numbers", 36, 24);
 	input_set_text_padding("3 numbers", 2);
+	input_set_font("3 numbers", font_open_sans_11);
 	
 	input_copy("3 numbers", "cp_R");
 	input_copy("3 numbers", "cp_G");
@@ -25,6 +26,7 @@ function make_inputs() {
 	input_set_focused_bkg_color("cp_HEX", c2);
 	input_set_dimensions("cp_HEX", 75, 24);
 	input_set_text_padding("cp_HEX", 2);
+	input_set_font("cp_HEX", font_open_sans_11);
 	
 	// LAYER NAME
 	input_create("layer name");
@@ -32,5 +34,6 @@ function make_inputs() {
 	input_set_bkg_color("layer name", c1);
 	input_set_focused_bkg_color("layer name", c2);
 	input_set_dimensions("layer name", 110, 24);
-	input_set_text_padding("layer name", 2);
+	input_set_text_padding("layer name", 4);
+	input_set_font("layer name", font_open_sans_9);
 }
