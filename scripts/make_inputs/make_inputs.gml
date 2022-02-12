@@ -1,7 +1,7 @@
 function make_inputs() {
 	
 	var c1 = merge_color(c_dkgray, c_white, 0.1);
-	var c2 = merge_color(c_dkgray, c_white, 0.25);
+	var c2 = merge_color(c_dkgray, c_white, 0.2);
 	
 	// COLOR PICKER
 	input_create("3 numbers");

@@ -37,6 +37,7 @@
     {"id":{"name":"spr_toolbar_icons","path":"sprites/spr_toolbar_icons/spr_toolbar_icons.yy",},"order":3,},
     {"id":{"name":"make_inputs","path":"scripts/make_inputs/make_inputs.yy",},"order":11,},
     {"id":{"name":"spr_1px","path":"sprites/spr_1px/spr_1px.yy",},"order":0,},
+    {"id":{"name":"draw_bottom_bar","path":"scripts/draw_bottom_bar/draw_bottom_bar.yy",},"order":19,},
     {"id":{"name":"spr_white","path":"sprites/spr_white/spr_white.yy",},"order":6,},
     {"id":{"name":"tool_fill","path":"scripts/tool_fill/tool_fill.yy",},"order":6,},
     {"id":{"name":"tool_brush","path":"scripts/tool_brush/tool_brush.yy",},"order":1,},

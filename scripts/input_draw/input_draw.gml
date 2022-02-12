@@ -287,6 +287,11 @@ function input_draw(input_id, x, y, mx, my) {
 				y + s.padding + 2 + string_height("I")
 				);
 		}
+		
+		if keyboard_check_pressed(vk_enter) {
+			s.has_focus = false;
+			_selected_input = "";
+		}
 	}
 	else show_debug_message("Unknown input ID: " + input_id);
 	

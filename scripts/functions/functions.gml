@@ -29,7 +29,8 @@ function init() {
 		globalvar _mouse;
 		globalvar _layer_select;
 		globalvar _layer_id_counter;
-	
+		globalvar _bottom_bar;
+		
 		enum _tool { none = -1, brush = 0, line = 1, fill = 2, eraser = 3, pipette = 4, area_select = 5 };
 	
 		input_init();
@@ -37,14 +38,16 @@ function init() {
 		foreach_init();
 	
 		_paper_res = { w: 1280, h: 720 };
+		
 		screen = { w: window_get_width(), h: window_get_height() };
+		window_resize();
 	
 		_current_tool = _tool.brush;
 		_layers = ds_list_create();
 		_layer_id_counter = 0;
 		_current_layer = -1;
 		
-		_current_layer = layer_add(c_grey, 1);
+		layer_add(c_grey, 1);
 		
 		_layer_select = { surf: -1, w: 200, h: 400, ypos: 0, ypos_smooth: 0 };
 	
@@ -58,7 +61,7 @@ function init() {
 				  tol: 10, phase: 0, start_col: [0,0,0,0], start_pos: [0,0], buf: -1 };
 	
 		_pipette = { buf_list: ds_list_create() };
-	
+		
 		_mask_surf = -1;
 		_draw_surf = -1;
 		_alpha_surf = -1;
@@ -68,6 +71,8 @@ function init() {
 		_color_wheel = { surf: -1, size_surf: -1, h: 0, s: 0, v: 1, r: 1, g: 1, b: 1, a: 1, hex: "#FFFFFF",
 						 pos: [-1, -1], msi: false, prev_rgba: [1, 1, 1, 1], wy: -0.5 };
 	
+		_bottom_bar = { h: 20, left_text: "", right_text: "" };
+		
 		create_camera();
 		cam_x = _paper_res.w/2;
 		cam_y = _paper_res.h/2;
@@ -84,7 +89,6 @@ function init() {
 		_selected_input = "";
 		_selected_slider = "";
 	
-		window_resize();
 		set_cursor(spr_cursor, 1);
 	
 		_filename = "new_paper";
@@ -160,21 +164,19 @@ function free_surf(s) {
 
 function layer_add(col = c_black, alpha = 0) {
 	
-	_layer_id_counter++;
-	var pos = ds_list_size(_layers);
-	
-	ds_list_insert(_layers, _current_layer+1, {
+	ds_list_insert(_layers, ++_current_layer, {
 		s: check_surf(-1, _paper_res.w, _paper_res.h, col, alpha), c: col, a: alpha,
-		l_id: _layer_id_counter, name: string(_layer_id_counter), hidden: false, layer_alpha: 1 });
+		l_id: _layer_id_counter, name: string(_layer_id_counter), hidden: false, layer_alpha: 1 }
+	);
 	
-	input_copy("layer name", "LNAME_"+string(_layer_id_counter));
-	input_set_text("LNAME_"+string(_layer_id_counter), "New layer");
+	input_copy("layer name", "L_NAME_"+string(_layer_id_counter));
+	input_set_text("L_NAME_"+string(_layer_id_counter), "New Layer");
 	
-	return pos;
+	_layer_id_counter++;
 }
 
 function layer_delete(l) {
-	input_delete("LNAME_"+string(_layers[| l].l_id));
+	input_delete("L_NAME_"+string(_layers[| l].l_id));
 	ds_list_delete(_layers, l);
 }
 

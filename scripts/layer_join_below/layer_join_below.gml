@@ -7,7 +7,7 @@ function layer_join_below(l) {
 	
 	gpu_set_blendmode_ext(bm_one, bm_inv_src_alpha);
 	surface_set_target(l_below.s);
-	draw_surface(l_above.s, 0, 0);
+	draw_surface_ext(l_above.s, 0, 0, 1, 1, 0, make_color_hsv(0, 0, l_above.layer_alpha*255), l_above.layer_alpha);
 	surface_reset_target();
 	gpu_set_blendmode(bm_normal);
 	
@@ -27,7 +27,7 @@ function layer_join_all() {
 	
 		gpu_set_blendmode_ext(bm_one, bm_inv_src_alpha);
 		surface_set_target(l_below.s);
-		draw_surface(l_above.s, 0, 0);
+		draw_surface_ext(l_above.s, 0, 0, 1, 1, 0, make_color_hsv(0, 0, l_above.layer_alpha*255), l_above.layer_alpha);
 		surface_reset_target();
 		gpu_set_blendmode(bm_normal);
 	
