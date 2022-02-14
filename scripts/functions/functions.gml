@@ -30,9 +30,16 @@ function init() {
 		globalvar _layer_select;
 		globalvar _layer_id_counter;
 		globalvar _bottom_bar;
+		globalvar _menu_map;
+		globalvar _language;
+		globalvar _langstr;
 		
 		enum _tool { none = -1, brush = 0, line = 1, fill = 2, eraser = 3, pipette = 4, area_select = 5 };
-	
+		
+		enum _lang { cz = "cz", en = "en" };
+		_language = _lang.cz;
+		
+		lang_strings();
 		input_init();
 		make_inputs();
 		foreach_init();
@@ -95,6 +102,9 @@ function init() {
 		_file_ext = ".gmp";
 	
 		can_reset_cursor = false;
+		
+		_menu_map = ds_map_create();
+		make_menus();
 	}
 }
 

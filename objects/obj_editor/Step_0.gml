@@ -40,13 +40,10 @@ var wy = window_get_y();
 if point_in_rectangle(display_mouse_get_x(), display_mouse_get_y(), wx, wy, wx+window_get_width(), wy+window_get_height()) {
 	if _mouse_over_gui set_cursor(spr_cursor, 1);
 	else set_cursor(spr_cursor, 0);
-	
 	can_reset_cursor = true;
 }
-else {
-	if can_reset_cursor {
-		can_reset_cursor = false;
-		window_set_cursor(cr_default);
-	}
+else if can_reset_cursor {
+	can_reset_cursor = false;
+	window_set_cursor(cr_default);
 }
 
