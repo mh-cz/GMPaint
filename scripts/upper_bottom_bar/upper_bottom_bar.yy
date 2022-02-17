@@ -6,7 +6,7 @@
     "path": "folders/Scripts.yy",
   },
   "resourceVersion": "1.0",
-  "name": "draw_bottom_bar",
+  "name": "upper_bottom_bar",
   "tags": [],
   "resourceType": "GMScript",
 }

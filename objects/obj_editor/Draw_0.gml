@@ -8,11 +8,11 @@ if _current_layer > -1 {
 	gpu_set_blendmode_ext(bm_one, bm_inv_src_alpha);
 	for(var i = 0; i < ds_list_size(_layers); i++) {
 		if i > _current_layer break;
-	
+		
 		var layer_data = _layers[| i];
-	
+		
 		if layer_data.hidden continue;
-	
+		
 		layer_data.s = check_surf(layer_data.s, _paper_res.w, _paper_res.h, layer_data.c, layer_data.a);
 		draw_surface_ext(layer_data.s, 0, 0, 1, 1, 0, make_color_hsv(0, 0, layer_data.layer_alpha*255), layer_data.layer_alpha);
 	}

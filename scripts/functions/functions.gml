@@ -30,14 +30,16 @@ function init() {
 		globalvar _layer_select;
 		globalvar _layer_id_counter;
 		globalvar _bottom_bar;
-		globalvar _menu_map;
+		globalvar _upper_bar;
+		globalvar _menu_list;
 		globalvar _language;
 		globalvar _langstr;
+		globalvar _sel_menu_opt;
+		globalvar _mouse_over_menu;
 		
 		enum _tool { none = -1, brush = 0, line = 1, fill = 2, eraser = 3, pipette = 4, area_select = 5 };
 		
-		enum _lang { cz = "cz", en = "en" };
-		_language = _lang.cz;
+		_language = "cz";
 		
 		lang_strings();
 		input_init();
@@ -79,6 +81,7 @@ function init() {
 						 pos: [-1, -1], msi: false, prev_rgba: [1, 1, 1, 1], wy: -0.5 };
 	
 		_bottom_bar = { h: 20, left_text: "", right_text: "" };
+		_upper_bar = { h: 24 };
 		
 		create_camera();
 		cam_x = _paper_res.w/2;
@@ -103,8 +106,10 @@ function init() {
 	
 		can_reset_cursor = false;
 		
-		_menu_map = ds_map_create();
+		_menu_list = ds_list_create();
 		make_menus();
+		_sel_menu_opt = "";
+		_mouse_over_menu = false;
 	}
 }
 
