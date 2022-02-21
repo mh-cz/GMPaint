@@ -44,6 +44,11 @@ if _current_layer > -1 {
 			tool_pipette();
 			//options_pipette();
 			break;
+		
+		case _tool.area_select:
+			//tool_area();
+			//options_pipette();
+			break;
 	}
 	
 	gpu_set_blendmode_ext(bm_one, bm_inv_src_alpha);
