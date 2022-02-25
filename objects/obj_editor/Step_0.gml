@@ -32,6 +32,18 @@ if keyboard_check(vk_control) {
 	if keyboard_check_pressed(ord("S")) {
 		save_all_layers();
 	}
+	else if keyboard_check_pressed(ord("A")) {
+		clear_area_select();
+	}
+}
+
+if mouse_check_button_pressed(mb_left) and !_mouse_over_gui {
+	last_click_pos = [_mouse.x, _mouse.y];
+}
+else if mouse_check_button_released(mb_left) and _current_tool == _tool.area_select {
+	if last_click_pos[0] == _mouse.x and last_click_pos[1] == _mouse.y {
+		clear_area_select();
+	}
 }
 
 var wx = window_get_x();
@@ -46,4 +58,3 @@ else if can_reset_cursor {
 	can_reset_cursor = false;
 	window_set_cursor(cr_default);
 }
-

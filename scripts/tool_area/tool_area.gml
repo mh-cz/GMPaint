@@ -1,11 +1,11 @@
-function tool_brush() {
+function tool_area() {
 	
 	gpu_set_blendmode_ext(bm_one, bm_inv_src_alpha);
 	
 	surface_set_target(_brush.brush_surf);
 	draw_clear_alpha(c_black, 0);
 	shader_set(shd_brush);
-	shader_set_uniform_f(shader_get_uniform(shd_brush, "fo"), _brush.falloff);
+	shader_set_uniform_f(shader_get_uniform(shd_brush, "fo"), 1000);
 	draw_surface(_brush.size_surf, 0, 0);
 	shader_reset();
 	surface_reset_target();
@@ -13,6 +13,18 @@ function tool_brush() {
 	if mouse_check_button_pressed(mb_left) {
 		_brush.moved = true;
 		_brush.pds_wm = _brush.step;
+	}
+	
+	if mouse_check_button_pressed(mb_left) and !_mouse_over_gui {
+		if keyboard_check(vk_shift) {
+			
+		}
+		else if keyboard_check(vk_control) {
+			
+		}
+		else {
+			clear_surf(_area_surf);
+		}
 	}
 	
 	if mouse_check_button(mb_left) and _brush.moved and !_mouse_over_gui {
@@ -30,32 +42,27 @@ function tool_brush() {
 		draw_surface(_mask_surf, 0, 0);
 		gpu_set_blendmode(bm_normal);
 		gpu_set_colorwriteenable(true, true, true, false);
-		draw_sprite_stretched_ext(spr_1px, 0, 0, 0, _paper_res.w, _paper_res.h, rgba2c(_brush.col, 255), 1);
+		draw_sprite_stretched_ext(spr_1px, 0, 0, 0, _paper_res.w, _paper_res.h, c_blue, 1);
 		gpu_set_colorwriteenable(true, true, true, true);
 		gpu_set_blendmode_ext(bm_one, bm_inv_src_alpha);
 		surface_reset_target();
 		
-		shader_set(shd_limit_to_area);
-		texture_set_stage(shader_get_sampler_index(shd_limit_to_area, "area"), surface_get_texture(_area_surf));
-		
 		surface_set_target(_alpha_surf);
 		draw_clear_alpha(c_black, 0);
-		draw_surface_ext(_draw_surf, 0, 0, 1, 1, 0, c_white, _brush.col[3]);
+		draw_surface_ext(_draw_surf, 0, 0, 1, 1, 0, c_white, 1);
 		surface_reset_target();
-		
-		shader_reset();
 	}
 	
 	gpu_set_blendmode(bm_normal);
 	
 	// EXTRA DRAW
-	draw_surface(_alpha_surf, 0, 0);
+	if mouse_check_button(mb_left) draw_surface_ext(_alpha_surf, 0, 0, 1, 1, 0, c_white, 0.25);
 	
 	// APPLY
 	if mouse_check_button_released(mb_left) {
 		
 		gpu_set_blendmode_ext(bm_one, bm_inv_src_alpha);
-		surface_set_target(_layers[| _current_layer].s);
+		surface_set_target(_area_surf);
 		shader_set(shd_premultiply_alpha);
 		draw_surface(_alpha_surf, 0, 0);
 		shader_reset();
@@ -66,4 +73,11 @@ function tool_brush() {
 		
 		save_layer();
 	}
+}
+
+function clear_area_select() {
+	surface_set_target(_area_surf);
+	draw_clear(c_blue);
+	surface_reset_target();	
+	show_debug_message(random(1));
 }

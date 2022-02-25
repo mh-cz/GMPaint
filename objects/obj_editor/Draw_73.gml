@@ -27,3 +27,9 @@ switch(_current_tool) {
 		if _brush.weight < 0.5 draw_line(_mouse.x - off, _mouse.y - off, _brush.wmx - off, _brush.wmy - off);
 		break;
 }
+
+//shader_set(shd_area_outline);
+//shader_set_uniform_f_array(shader_get_uniform(shd_area_outline, "texel_size"), [1/_paper_res.w, 1/_paper_res.h]);
+//shader_set_uniform_f(shader_get_uniform(shd_area_outline, "time"), get_timer() * 0.000001);
+draw_surface_ext(_area_surf, 0, 0, 1, 1, 0, c_white, 0.25);
+shader_reset();

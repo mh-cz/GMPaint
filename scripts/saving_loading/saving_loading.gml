@@ -14,6 +14,8 @@ function save_all_layers() {
 	}
 	
 	buffer_delete(buf);
+	
+	save_area_select();
 }
 
 function save_layer(i = _current_layer) {
@@ -31,7 +33,7 @@ function save_layer(i = _current_layer) {
 	
 	buffer_delete(buf);
 	
-	show_debug_message(["saved", i])
+	save_area_select();
 }
 
 function load_all_layers() {
@@ -40,7 +42,6 @@ function load_all_layers() {
 		
 		var files = [];
 		var file_name = file_find_first(_filename+"/*.l", fa_readonly);
-		show_debug_message(file_name);
 		
 		while(file_name != "") {
 		    array_push(files, file_name);
@@ -62,6 +63,27 @@ function load_all_layers() {
 			}
 		}
 		
+		buffer_delete(buf);
+	}
+	
+	load_area_select();
+}
+
+function save_area_select() {
+	
+	var buf = buffer_create(_paper_res.w * _paper_res.h * 4, buffer_grow, 1);
+	buffer_seek(buf, buffer_seek_start, 0);
+	buffer_get_surface(buf, _area_surf, 0);
+	buffer_save(buf, _filename+"/a.s");
+	buffer_delete(buf);
+}
+
+function load_area_select() {
+	
+	if file_exists(_filename+"/a.s") {
+		var buf = buffer_create(_paper_res.w * _paper_res.h * 4, buffer_grow, 1);
+		buf = buffer_load(_filename+"/a.s");
+		buffer_set_surface(buf, _area_surf, 0);
 		buffer_delete(buf);
 	}
 }

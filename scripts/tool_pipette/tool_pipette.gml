@@ -2,7 +2,9 @@ function tool_pipette() {
 	
 	if mouse_check_button(mb_left) and !_mouse_over_gui {
 		
-		var c = surface_getpixel_ext(_pipette.buf_list[| _current_layer], _mouse.x, _mouse.y);
+		var c = keyboard_check(vk_control) ?
+			surface_getpixel_ext(_draw_surf, _mouse.x, _mouse.y) :
+			surface_getpixel_ext(_layers[| _current_layer].s, _mouse.x, _mouse.y);
 		
 		var rgba = c2rgba(c);
 		

@@ -24,7 +24,12 @@ function draw_color_picker() {
 	var yyy = display_get_gui_height() - 120 - _color_wheel.wy * off * 0.5  - _bottom_bar.h;
 	
 	draw_sprite_ext(spr_rgb_wheel_64, 0, px-10, yyy, 1, 1, 0, c_white, 1 - clamp(_color_wheel.wy, 0, 1));
-	draw_sprite_ext(spr_1px, 0, px + 64, yyy+32, 30, 30, 0, rgba2c(_brush.col, 255, false), 1 - clamp(_color_wheel.wy, 0, 1));
+	draw_sprite_ext(spr_checkers2, 0, px + 64, yyy+32, 1, 1, 0, c_white, 1 - clamp(_color_wheel.wy, 0, 1));
+	draw_sprite_ext(spr_1px, 0, px + 64, yyy+32, 30, 30, 0, rgba2c(_brush.col, 255, false), (1 - clamp(_color_wheel.wy, 0, 1)) * _brush.col[3]);
+	draw_set_color(c_black);
+	draw_set_alpha(1 - clamp(_color_wheel.wy, 0, 1));
+	draw_rectangle(px + 64, yyy+32, px + 64 + 29, yyy+32 + 29, true);
+	draw_set_alpha(1);
 	
 	draw_set_color(c_dkgray);
 	draw_rectangle(px-10, py-10, px+winw, py+winh, false);

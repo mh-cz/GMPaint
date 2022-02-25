@@ -22,9 +22,7 @@ function on_switch_tool(nt) {
 			break;
 
 		case _tool.pipette:
-			for(var i = 0; i < ds_list_size(_layers); i++) {
-				buffer_delete(_pipette.buf_list[| i]);
-			}
+
 			break;
 	}
 	
@@ -42,12 +40,22 @@ function on_switch_tool(nt) {
 	
 		case _tool.eraser:
 			break;
-
+		
 		case _tool.pipette:
-			for(var i = 0; i < ds_list_size(_layers); i++) {
-				_pipette.buf_list[| i] = buffer_create(_paper_res.w * _paper_res.h * 4, buffer_fixed, 1);
-				buffer_get_surface(_pipette.buf_list[| i], _layers[| i].s, 0);
+			
+			gpu_set_blendmode_ext(bm_one, bm_inv_src_alpha);
+			surface_set_target(_draw_surf);
+			draw_clear_alpha(c_black, 0);
+			
+			var num = ds_list_size(_layers)-1;
+			for(var l = num; l > -1; l--) {
+				var lr = _layers[| l];
+				if !lr.hidden draw_surface_ext(lr.s, 0, 0, 1, 1, 0, make_color_hsv(0, 0, lr.layer_alpha*255), lr.layer_alpha);
 			}
+			
+			surface_reset_target();
+			gpu_set_blendmode(bm_normal);
 			break;
+			
 	}
 }

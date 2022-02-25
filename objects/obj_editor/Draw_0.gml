@@ -46,7 +46,7 @@ if _current_layer > -1 {
 			break;
 		
 		case _tool.area_select:
-			//tool_area();
+			tool_area();
 			//options_pipette();
 			break;
 	}

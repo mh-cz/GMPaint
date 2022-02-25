@@ -3,6 +3,7 @@ get_mouse_pos();
 _mask_surf = check_surf(_mask_surf, _paper_res.w, _paper_res.h);
 _draw_surf = check_surf(_draw_surf, _paper_res.w, _paper_res.h);
 _alpha_surf = check_surf(_alpha_surf, _paper_res.w, _paper_res.h);
+_area_surf = check_surf(_area_surf, _paper_res.w, _paper_res.h);
 _img_ovr_surf = check_surf(_img_ovr_surf, _paper_res.w, _paper_res.h);
 _brush_surf = check_surf(_brush_surf, _brush.size, _brush.size);
 _brush.brush_surf = check_surf(_brush.brush_surf, _brush.size, _brush.size);

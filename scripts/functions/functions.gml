@@ -12,6 +12,7 @@ function init() {
 		globalvar _alpha_surf;
 		globalvar _draw_surf;
 		globalvar _brush_surf;
+		globalvar _area_surf;
 		globalvar _img_ovr_surf;
 		globalvar _current_tool;
 		globalvar _zoom;
@@ -36,6 +37,7 @@ function init() {
 		globalvar _langstr;
 		globalvar _sel_menu_opt;
 		globalvar _mouse_over_menu;
+		globalvar _area_select;
 		
 		enum _tool { none = -1, brush = 0, line = 1, fill = 2, eraser = 3, pipette = 4, area_select = 5 };
 		
@@ -71,11 +73,14 @@ function init() {
 	
 		_pipette = { buf_list: ds_list_create() };
 		
+		_area_select = {  };
+		
 		_mask_surf = -1;
 		_draw_surf = -1;
 		_alpha_surf = -1;
 		_brush_surf = -1;
 		_img_ovr_surf = -1;
+		_area_surf = -1;
 	
 		_color_wheel = { surf: -1, size_surf: -1, h: 0, s: 0, v: 1, r: 1, g: 1, b: 1, a: 1, hex: "#FFFFFF",
 						 pos: [-1, -1], msi: false, prev_rgba: [1, 1, 1, 1], wy: -0.5 };
@@ -90,7 +95,8 @@ function init() {
 		_zoom = 1;
 		
 		_mouse = { x: 0, y: 0, xfloat: 0, yfloat: 0 };
-	
+		last_click_pos = [0,0];
+		
 		draw_set_circle_precision(32);
 	
 		_mouse_over_gui = false;
