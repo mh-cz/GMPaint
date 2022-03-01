@@ -29,11 +29,18 @@ camera_set_view_size(view_camera[0], screen.w * _zoom, screen.h * _zoom);
 #endregion
 
 if keyboard_check(vk_control) {
+	
 	if keyboard_check_pressed(ord("S")) {
 		save_all_layers();
 	}
 	else if keyboard_check_pressed(ord("A")) {
 		clear_area_select();
+	}
+	else if keyboard_check_pressed(ord("C")) {
+		area_copy();
+	}
+	else if keyboard_check_pressed(ord("V")) {
+		area_paste();
 	}
 }
 
@@ -41,7 +48,8 @@ if mouse_check_button_pressed(mb_left) and !_mouse_over_gui {
 	last_click_pos = [_mouse.x, _mouse.y];
 }
 else if mouse_check_button_released(mb_left) and _current_tool == _tool.area_select {
-	if last_click_pos[0] == _mouse.x and last_click_pos[1] == _mouse.y {
+	if last_click_pos[0] == _mouse.x and last_click_pos[1] == _mouse.y
+	and !point_in_rectangle(_mouse.x, _mouse.y, 0, 0, _paper_res.w, _paper_res.h) {
 		clear_area_select();
 	}
 }
@@ -58,3 +66,4 @@ else if can_reset_cursor {
 	can_reset_cursor = false;
 	window_set_cursor(cr_default);
 }
+

@@ -13,6 +13,7 @@ function init() {
 		globalvar _draw_surf;
 		globalvar _brush_surf;
 		globalvar _area_surf;
+		globalvar _copy_surf;
 		globalvar _img_ovr_surf;
 		globalvar _current_tool;
 		globalvar _zoom;
@@ -38,6 +39,7 @@ function init() {
 		globalvar _sel_menu_opt;
 		globalvar _mouse_over_menu;
 		globalvar _area_select;
+		globalvar _pasted_selection;
 		
 		enum _tool { none = -1, brush = 0, line = 1, fill = 2, eraser = 3, pipette = 4, area_select = 5 };
 		
@@ -47,7 +49,7 @@ function init() {
 		input_init();
 		make_inputs();
 		foreach_init();
-	
+		
 		_paper_res = { w: 1280, h: 720 };
 		
 		screen = { w: window_get_width(), h: window_get_height() };
@@ -73,7 +75,8 @@ function init() {
 	
 		_pipette = { buf_list: ds_list_create() };
 		
-		_area_select = {  };
+		_area_select = { mode: 1, start_pos: [0,0], mn: [0,0], mx: [0,0], copy_surf_size: [1,1] };
+		_pasted_selection = { active: false, pos: [0,0], size: [0,0], rot: 0, placed: false };
 		
 		_mask_surf = -1;
 		_draw_surf = -1;
@@ -81,10 +84,11 @@ function init() {
 		_brush_surf = -1;
 		_img_ovr_surf = -1;
 		_area_surf = -1;
-	
+		_copy_surf = -1;
+		
 		_color_wheel = { surf: -1, size_surf: -1, h: 0, s: 0, v: 1, r: 1, g: 1, b: 1, a: 1, hex: "#FFFFFF",
 						 pos: [-1, -1], msi: false, prev_rgba: [1, 1, 1, 1], wy: -0.5 };
-	
+		
 		_bottom_bar = { h: 20, left_text: "", right_text: "" };
 		_upper_bar = { h: 24 };
 		

@@ -18,7 +18,10 @@ if _current_layer > -1 {
 	}
 	gpu_set_blendmode(bm_normal);
 	
-	switch(_current_tool) {
+	if _pasted_selection.active {
+		pasted_selection();
+	}
+	else switch(_current_tool) {
 	
 		case _tool.brush:
 			tool_brush();

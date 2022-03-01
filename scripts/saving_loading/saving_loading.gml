@@ -26,7 +26,7 @@ function save_layer(i = _current_layer) {
 
 	var layer_data = _layers[| i];
 	layer_data.s = check_surf(layer_data.s, _paper_res.w, _paper_res.h, layer_data.c, layer_data.a);
-		
+	
 	buffer_seek(buf, buffer_seek_start, 0);
 	buffer_get_surface(buf, layer_data.s, 0);
 	buffer_save(buf, _filename+"/"+string(i)+".l");

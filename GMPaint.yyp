@@ -41,6 +41,8 @@
     {"id":{"name":"spr_1px","path":"sprites/spr_1px/spr_1px.yy",},"order":0,},
     {"id":{"name":"upper_bottom_bar","path":"scripts/upper_bottom_bar/upper_bottom_bar.yy",},"order":19,},
     {"id":{"name":"shd_limit_to_area","path":"shaders/shd_limit_to_area/shd_limit_to_area.yy",},"order":8,},
+    {"id":{"name":"spr_area_select_opt","path":"sprites/spr_area_select_opt/spr_area_select_opt.yy",},"order":13,},
+    {"id":{"name":"copy_paste","path":"scripts/copy_paste/copy_paste.yy",},"order":23,},
     {"id":{"name":"spr_white","path":"sprites/spr_white/spr_white.yy",},"order":6,},
     {"id":{"name":"tool_fill","path":"scripts/tool_fill/tool_fill.yy",},"order":6,},
     {"id":{"name":"tool_area","path":"scripts/tool_area/tool_area.yy",},"order":22,},
