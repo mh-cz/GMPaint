@@ -76,7 +76,7 @@ function init() {
 		_pipette = { buf_list: ds_list_create() };
 		
 		_area_select = { mode: 1, start_pos: [0,0], mn: [0,0], mx: [0,0], copy_surf_size: [1,1] };
-		_pasted_selection = { active: false, pos: [0,0], size: [0,0], rot: 0, placed: false };
+		_pasted_selection = { active: false, pos: [0,0], size: [0,0], rot: 0, placed: false, action: 0 /*1 mov, 2 res, 3 rot*/, mpos: [] };
 		
 		_mask_surf = -1;
 		_draw_surf = -1;

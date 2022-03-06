@@ -84,6 +84,9 @@ function line_circle_intersection(x1, y1, x2, y2, cx, cy, rad) {
 
 function draw_circle_ext(x, y, r, w, seg) {
 	
+	x += 0.5;
+	y += 0.5;
+	
 	var step = 360/seg;
 	draw_primitive_begin(pr_trianglestrip);
 	for (var i = 0; i <= 360; i += step)

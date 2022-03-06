@@ -45,23 +45,183 @@ function area_paste() {
 
 function pasted_selection() {
 	
+	var ps = _pasted_selection;
+	var h = [0,0,0,0,0,0,0,0];
+	
+	var corner2center_angle = point_direction(0, 0, ps.size[0]/2, ps.size[1]/2);
+	var corner2center_dist = point_distance(0, 0, ps.size[0]/2, ps.size[1]/2);
+	
 	gpu_set_blendmode_ext(bm_one, bm_inv_src_alpha);
 	
-	if !_pasted_selection.placed {
+	surface_set_target(_draw_surf);
+	draw_clear_alpha(c_black, 0);
+	
+	if !ps.placed {
 		
-		_pasted_selection.pos = [_mouse.x - round(_pasted_selection.size[0]/2), _mouse.y - round(_pasted_selection.size[1]/2)];
-		draw_surface(_copy_surf, _pasted_selection.pos[0], _pasted_selection.pos[1]);		
+		ps.pos = [_mouse.x - round(ps.size[0]/2), _mouse.y - round(ps.size[1]/2)];
+		draw_surface(_copy_surf, ps.pos[0], ps.pos[1]);		
 		
-		if mouse_check_button_pressed(mb_left) and !_mouse_over_gui _pasted_selection.placed = true;
+		if mouse_check_button_released(mb_left) and !_mouse_over_gui ps.placed = true;
 	}
 	else {
-		draw_surface_general(_copy_surf, 0, 0, _pasted_selection.size[0], _pasted_selection.size[1], 
-			_pasted_selection.pos[0], _pasted_selection.pos[1],
-			_area_select.copy_surf_size[0]/_pasted_selection.size[0], _area_select.copy_surf_size[1]/_pasted_selection.size[1], 
-			_pasted_selection.rot, c_white, c_white, c_white, c_white, 1);
+		var rot_pos = [
+			(ps.pos[0] - lengthdir_x(corner2center_dist, corner2center_angle + ps.rot)) + ps.size[0]/2,
+			(ps.pos[1] - lengthdir_y(corner2center_dist, corner2center_angle + ps.rot)) + ps.size[1]/2
+		];
+	
+		draw_surface_general(_copy_surf, 0, 0, ps.size[0], ps.size[1], rot_pos[0], rot_pos[1],
+			_area_select.copy_surf_size[0]/ps.size[0], _area_select.copy_surf_size[1]/ps.size[1], 
+			ps.rot, c_white, c_white, c_white, c_white, 1);
+	}
+	surface_reset_target();
+	
+	if ps.placed {
 		
+		if !mouse_check_button(mb_left) {
+			
+			ps.action = 0;
+			
+			var r = max(1, 10 * _zoom * 1.5);
+			
+			if point_distance(ps.pos[0], ps.pos[1], _mouse.x, _mouse.y) < r {
+				ps.mpos = [_mouse.x, _mouse.y];
+				ps.action = 3.1;
+			}
+			else if point_distance(ps.pos[0]+ps.size[0]/2, ps.pos[1], _mouse.x, _mouse.y) < r {
+				ps.mpos = [_mouse.x, _mouse.y];
+				ps.action = 3.2;
+			}
+			else if point_distance(ps.pos[0]+ps.size[0], ps.pos[1], _mouse.x, _mouse.y) < r {
+				ps.mpos = [_mouse.x, _mouse.y];
+				ps.action = 3.3;
+			}
+			else if point_distance(ps.pos[0]+ps.size[0], ps.pos[1]+ps.size[1]/2, _mouse.x, _mouse.y) < r {
+				ps.mpos = [_mouse.x, _mouse.y];
+				ps.action = 3.4;
+			}
+			else if point_distance(ps.pos[0]+ps.size[0], ps.pos[1]+ps.size[1], _mouse.x, _mouse.y) < r {
+				ps.mpos = [_mouse.x, _mouse.y];
+				ps.action = 3.5;
+			}
+			else if point_distance(ps.pos[0]+ps.size[0]/2, ps.pos[1]+ps.size[1], _mouse.x, _mouse.y) < r {
+				ps.mpos = [_mouse.x, _mouse.y];
+				ps.action = 3.6;
+			}
+			else if point_distance(ps.pos[0], ps.pos[1]+ps.size[1], _mouse.x, _mouse.y) < r {
+				ps.mpos = [_mouse.x, _mouse.y];
+				ps.action = 3.7;
+			}
+			else if point_distance(ps.pos[0], ps.pos[1]+ps.size[1]/2, _mouse.x, _mouse.y) < r {
+				ps.mpos = [_mouse.x, _mouse.y];
+				ps.action = 3.8;
+			}
+			else if point_in_rectangle(_mouse.x, _mouse.y, ps.pos[0], ps.pos[1], ps.pos[0]+ps.size[0], ps.pos[1]+ps.size[1]) {
+				ps.mpos = [_mouse.x, _mouse.y];
+				ps.action = 1;
+			}
+			else if corner2center_dist > point_distance(ps.pos[0]+ps.size[0]/2, ps.pos[1]+ps.size[1]/2, _mouse.x, _mouse.y) {
+				ps.mpos = [point_direction(ps.pos[0]+ps.size[0]/2, ps.pos[1]+ps.size[1]/2, _mouse.x, _mouse.y), 0];
+				ps.action = 2;
+			}
+		}
+		else {
+			switch(ps.action) {
+				case 1:
+					ps.pos[0] -= ps.mpos[0] - _mouse.x;
+					ps.pos[1] -= ps.mpos[1] - _mouse.y;
+					ps.mpos = [_mouse.x, _mouse.y];
+					break;
+				
+				case 2:
+					var a = point_direction(ps.pos[0]+ps.size[0]/2, ps.pos[1]+ps.size[1]/2, _mouse.x, _mouse.y);
+					ps.rot -= ps.mpos[0] - a;
+					ps.mpos = [a, 0];
+					break;
+				
+				case 3.1:
+					ps.pos[0] -= ps.mpos[0] - _mouse.x;
+					ps.pos[1] -= ps.mpos[1] - _mouse.y;
+					ps.size[0] += ps.mpos[0] - _mouse.x;
+					ps.size[1] += ps.mpos[1] - _mouse.y;
+					ps.mpos = [_mouse.x, _mouse.y];
+					break;
+				case 3.2:
+					ps.pos[1] -= ps.mpos[1] - _mouse.y;
+					ps.size[1] += ps.mpos[1] - _mouse.y;
+					ps.mpos = [_mouse.x, _mouse.y];
+					break;
+				case 3.3:
+					ps.pos[1] -= ps.mpos[1] - _mouse.y;
+					ps.size[0] -= ps.mpos[0] - _mouse.x;
+					ps.size[1] += ps.mpos[1] - _mouse.y;
+					ps.mpos = [_mouse.x, _mouse.y];
+					break;
+				case 3.4:
+					ps.size[0] -= ps.mpos[0] - _mouse.x;
+					ps.mpos = [_mouse.x, _mouse.y];
+					break;
+				case 3.5:
+					ps.size[0] -= ps.mpos[0] - _mouse.x;
+					ps.size[1] -= ps.mpos[1] - _mouse.y;
+					ps.mpos = [_mouse.x, _mouse.y];
+					break;
+				case 3.6:
+					ps.size[1] -= ps.mpos[1] - _mouse.y;
+					ps.mpos = [_mouse.x, _mouse.y];
+					break;
+				case 3.7:
+					ps.pos[0] -= ps.mpos[0] - _mouse.x;
+					ps.size[0] += ps.mpos[0] - _mouse.x;
+					ps.size[1] -= ps.mpos[1] - _mouse.y;
+					ps.mpos = [_mouse.x, _mouse.y];
+					break;
+				case 3.8:
+					ps.pos[0] -= ps.mpos[0] - _mouse.x;
+					ps.size[0] += ps.mpos[0] - _mouse.x;
+					ps.mpos = [_mouse.x, _mouse.y];
+					break;
+			}
+		}
 	}
 	
+	draw_surface(_draw_surf, 0, 0);
+	
 	gpu_set_blendmode(bm_normal);
+	
+	if ps.placed {
+		
+		surface_set_target(_draw_surf);
+		draw_clear_alpha(c_black, 0);
+		draw_rectangle(ps.pos[0], ps.pos[1], ps.pos[0]+ps.size[0], ps.pos[1]+ps.size[1], false);
+		surface_reset_target();
+		
+		shader_set(shd_area_outline);
+		shader_set_uniform_f_array(shader_get_uniform(shd_area_outline, "texel_size"), [1/_paper_res.w, 1/_paper_res.h]);
+		shader_set_uniform_f(shader_get_uniform(shd_area_outline, "time"), get_timer() * 0.000001);
+		draw_surface(_draw_surf, 0, 0);
+		shader_reset();
+		
+		var zm = _zoom * 1.5;
+		if floor(ps.action) == 3 h[round(frac(ps.action) * 10 - 1)] = 2;
+		
+		draw_set_color(c_black);
+		draw_circle_ext(ps.pos[0], ps.pos[1], (3.5 + h[0]) * zm, 2 * zm, 4);
+		draw_circle_ext(ps.pos[0]+ps.size[0]/2, ps.pos[1], (3.5 + h[1]) * zm, 2 * zm, 4);
+		draw_circle_ext(ps.pos[0]+ps.size[0], ps.pos[1], (3.5 + h[2]) * zm, 2 * zm, 4);
+		draw_circle_ext(ps.pos[0]+ps.size[0], ps.pos[1]+ps.size[1]/2, (3.5 + h[3]) * zm, 2 * zm, 4);
+		draw_circle_ext(ps.pos[0]+ps.size[0], ps.pos[1]+ps.size[1], (3.5 + h[4]) * zm, 2 * zm, 4);
+		draw_circle_ext(ps.pos[0]+ps.size[0]/2, ps.pos[1]+ps.size[1], (3.5 + h[5]) * zm, 2 * zm, 4);
+		draw_circle_ext(ps.pos[0], ps.pos[1]+ps.size[1], (3.5 + h[6]) * zm, 2 * zm, 4);
+		draw_circle_ext(ps.pos[0], ps.pos[1]+ps.size[1]/2, (3.5 + h[7]) * zm, 2 * zm, 4);
+		draw_set_color(c_white);
+		draw_circle_ext(ps.pos[0], ps.pos[1], (2.5 + h[0]) * zm, zm, 4);
+		draw_circle_ext(ps.pos[0]+ps.size[0]/2, ps.pos[1], (2.5 + h[1]) * zm, zm, 4);
+		draw_circle_ext(ps.pos[0]+ps.size[0], ps.pos[1], (2.5 + h[2]) * zm, zm, 4);
+		draw_circle_ext(ps.pos[0]+ps.size[0], ps.pos[1]+ps.size[1]/2, (2.5 + h[3]) * zm, zm, 4);
+		draw_circle_ext(ps.pos[0]+ps.size[0], ps.pos[1]+ps.size[1], (2.5 + h[4]) * zm, zm, 4);
+		draw_circle_ext(ps.pos[0]+ps.size[0]/2, ps.pos[1]+ps.size[1], (2.5 + h[5]) * zm, zm, 4);
+		draw_circle_ext(ps.pos[0], ps.pos[1]+ps.size[1], (2.5 + h[6]) * zm, zm, 4);
+		draw_circle_ext(ps.pos[0], ps.pos[1]+ps.size[1]/2, (2.5 + h[7]) * zm, zm, 4);
+	}
 	
 }
