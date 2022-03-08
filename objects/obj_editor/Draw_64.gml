@@ -12,10 +12,10 @@ draw_toolbar(35, 35+_bottom_bar.h, 2);
 switch(_current_tool) {
 	case _tool.brush: options_brush(); break;
 	case _tool.line: options_line(); break;
-	//case _tool.fill: options_fill(); break;
+	case _tool.fill: options_fill(); break;
 	case _tool.eraser: options_brush(); break;
 	//case _tool.pipette: options_pipette(); break;
-	//case _tool.area_select: options_area(); break;
+	case _tool.area_select: options_area(); break;
 }
 
 draw_color_picker();

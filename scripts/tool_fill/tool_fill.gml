@@ -34,6 +34,7 @@ function tool_fill() {
 		shader_set_uniform_f(shader_get_uniform(shd_flood_fill, "tolerance"), _fill.tol/255);
 		shader_set_uniform_f_array(shader_get_uniform(shd_flood_fill, "start_col"), _fill.start_col);
 		texture_set_stage(shader_get_sampler_index(shd_flood_fill, "img"), surface_get_texture(_layers[| _current_layer].s));
+		texture_set_stage(shader_get_sampler_index(shd_flood_fill, "area"), surface_get_texture(_area_surf));
 		
 		if _fill.n > 1 surface_copy(_fill.copy_surf, 0, 0, _mask_surf);
 		

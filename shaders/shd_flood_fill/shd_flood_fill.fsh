@@ -1,6 +1,7 @@
 varying vec2 v_vTexcoord;
 
 uniform sampler2D img;
+uniform sampler2D area;
 uniform vec2 start_pos;
 uniform vec2 texel_size;
 uniform vec4 start_col;
@@ -52,7 +53,7 @@ void main() {
 	vec4 img_col = texture2D(img, v_vTexcoord);
 	
 	if (ok_tol(img_col, start_col, tolerance) && is_around(img, start_col, tolerance)) {
-		c = vec4(vec3(get_brightness(img_col.rgb)), 1.);
+		c = vec4(vec3(get_brightness(img_col.rgb)), texture2D(area, v_vTexcoord).a);
 	}
 	
     gl_FragColor = c;

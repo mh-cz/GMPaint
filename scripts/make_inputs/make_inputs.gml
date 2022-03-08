@@ -51,5 +51,5 @@ function make_inputs() {
 	input_copy("4 numbers", "brush spacing");
 	input_copy("4 numbers", "brush weight");
 	input_copy("4 numbers", "line tension");
-	input_copy("4 numbers", "fill toleration");
+	input_copy("4 numbers", "fill tolerancy");
 }

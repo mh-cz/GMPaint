@@ -9,9 +9,10 @@ function lang_strings() {
 			brush_option_size: "Velikost",
 			brush_option_falloff: "Hrubost",
 			brush_option_spacing: "Mezery",
-			brush_option_weight: "Vyhlazení",
+			brush_option_weight: "Rychlost",
 			line_option_tension: "Napnutí",
 			line_option_closed: "Spojit konce",
+			fill_option_tolerancy: "Tolerance",
 		},
 		en: {
 			menu_file: "File",
@@ -22,9 +23,10 @@ function lang_strings() {
 			brush_option_size: "Size",
 			brush_option_falloff: "Hardness",
 			brush_option_spacing: "Spacing",
-			brush_option_weight: "Smoothing",
+			brush_option_weight: "Speed",
 			line_option_tension: "Tension",
 			line_option_closed: "Connect ends",
+			fill_option_tolerancy: "Tolerancy",
 		},
 	};
 }

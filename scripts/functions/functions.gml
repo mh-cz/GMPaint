@@ -71,11 +71,11 @@ function init() {
 		_line = { points_list: ds_list_create(), grabbed: -1, tension: 0, closed: false, options_init: false };
 	
 		_fill = { surf: -1, comp_surf: -1, copy_surf: -1, find_col_surf: -1, one_px_surf: -1,
-				  tol: 10, phase: 0, start_col: [0,0,0,0], start_pos: [0,0], buf: -1 };
+				  tol: 10, phase: 0, start_col: [0,0,0,0], start_pos: [0,0], buf: -1, options_init: false };
 		
 		_pipette = { buf_list: ds_list_create() };
 		
-		_area_select = { mode: 1, start_pos: [0,0], mn: [0,0], mx: [0,0], copy_surf_size: [1,1] };
+		_area_select = { mode: 0, start_pos: [0,0], mn: [0,0], mx: [0,0], copy_surf_size: [1,1], options_init: false };
 		_pasted_selection = { active: false, pos: [0,0], size: [0,0], rot: 0, placed: false, action: 0, mpos: [0,0] };
 		
 		_mask_surf = -1;

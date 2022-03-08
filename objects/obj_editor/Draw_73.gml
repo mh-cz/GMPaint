@@ -14,6 +14,9 @@ switch(_current_tool) {
 	case _tool.brush:
 	case _tool.eraser:
 	case _tool.line:
+	case _tool.area_select:
+	
+		if _current_tool == _tool.area_select and _area_select.mode != 2 break;
 	
 		if (!mouse_check_button(mb_left) or _mouse_over_gui) and surface_exists(_brush.brush_surf) {
 			gpu_set_blendmode_ext(bm_one, bm_inv_src_alpha);
