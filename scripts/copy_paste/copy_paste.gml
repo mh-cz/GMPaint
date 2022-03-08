@@ -64,15 +64,13 @@ function pasted_selection() {
 		if mouse_check_button_released(mb_left) and !_mouse_over_gui ps.placed = true;
 	}
 	else {
-		var rot_pos = [
+		draw_surface_general(_copy_surf, 0, 0, _area_select.copy_surf_size[0], _area_select.copy_surf_size[1],
 			(ps.pos[0] - lengthdir_x(corner2center_dist, corner2center_angle + ps.rot)) + ps.size[0]/2,
-			(ps.pos[1] - lengthdir_y(corner2center_dist, corner2center_angle + ps.rot)) + ps.size[1]/2
-		];
-	
-		draw_surface_general(_copy_surf, 0, 0, ps.size[0], ps.size[1], rot_pos[0], rot_pos[1],
-			_area_select.copy_surf_size[0]/ps.size[0], _area_select.copy_surf_size[1]/ps.size[1], 
-			ps.rot, c_white, c_white, c_white, c_white, 1);
+			(ps.pos[1] - lengthdir_y(corner2center_dist, corner2center_angle + ps.rot)) + ps.size[1]/2,
+			ps.size[0]/_area_select.copy_surf_size[0], ps.size[1]/_area_select.copy_surf_size[1], ps.rot, 
+			c_white, c_white, c_white, c_white, 1);
 	}
+	
 	surface_reset_target();
 	
 	if ps.placed {
@@ -126,19 +124,20 @@ function pasted_selection() {
 		}
 		else {
 			switch(ps.action) {
-				case 1:
+				
+				case 1: // move
 					ps.pos[0] -= ps.mpos[0] - _mouse.x;
 					ps.pos[1] -= ps.mpos[1] - _mouse.y;
 					ps.mpos = [_mouse.x, _mouse.y];
 					break;
 				
-				case 2:
+				case 2: // rotate
 					var a = point_direction(ps.pos[0]+ps.size[0]/2, ps.pos[1]+ps.size[1]/2, _mouse.x, _mouse.y);
 					ps.rot -= ps.mpos[0] - a;
 					ps.mpos = [a, 0];
 					break;
 				
-				case 3.1:
+				case 3.1: // resize
 					ps.pos[0] -= ps.mpos[0] - _mouse.x;
 					ps.pos[1] -= ps.mpos[1] - _mouse.y;
 					ps.size[0] += ps.mpos[0] - _mouse.x;
@@ -188,7 +187,24 @@ function pasted_selection() {
 	
 	gpu_set_blendmode(bm_normal);
 	
-	if ps.placed {
+	if keyboard_check_pressed(vk_enter) {
+		
+		gpu_set_blendmode_ext(bm_one, bm_inv_src_alpha);
+		surface_set_target(_layers[| _current_layer].s);
+		draw_surface(_draw_surf, 0, 0);
+		surface_reset_target();
+		
+		clear_surf([_mask_surf, _draw_surf, _alpha_surf, _area_surf]);
+		gpu_set_blendmode(bm_normal);
+		
+		save_layer();
+		_pasted_selection.active = false;
+		clear_area_select();
+		
+		return 0;
+	}
+	
+	if ps.placed and !mouse_check_button(mb_left) {
 		
 		surface_set_target(_draw_surf);
 		draw_clear_alpha(c_black, 0);

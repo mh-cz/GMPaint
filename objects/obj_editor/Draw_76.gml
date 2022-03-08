@@ -6,6 +6,7 @@ _alpha_surf = check_surf(_alpha_surf, _paper_res.w, _paper_res.h);
 _area_surf = check_surf(_area_surf, _paper_res.w, _paper_res.h, c_blue, 1);
 _img_ovr_surf = check_surf(_img_ovr_surf, _paper_res.w, _paper_res.h);
 _copy_surf = check_surf(_copy_surf, _area_select.copy_surf_size[0], _area_select.copy_surf_size[1]);
+
 _brush_surf = check_surf(_brush_surf, _brush.size, _brush.size);
 _brush.brush_surf = check_surf(_brush.brush_surf, _brush.size, _brush.size);
 _brush.size_surf = check_surf(_brush.size_surf, _brush.size, _brush.size);

@@ -15,6 +15,7 @@
     {"id":{"name":"spr_bkg_squares","path":"sprites/spr_bkg_squares/spr_bkg_squares.yy",},"order":1,},
     {"id":{"name":"spr_layer_visibility","path":"sprites/spr_layer_visibility/spr_layer_visibility.yy",},"order":11,},
     {"id":{"name":"spr_alpha","path":"sprites/spr_alpha/spr_alpha.yy",},"order":5,},
+    {"id":{"name":"tools_options","path":"scripts/tools_options/tools_options.yy",},"order":24,},
     {"id":{"name":"lang_strings","path":"scripts/lang_strings/lang_strings.yy",},"order":21,},
     {"id":{"name":"input_draw","path":"scripts/input_draw/input_draw.yy",},"order":7,},
     {"id":{"name":"spr_slider_rider","path":"sprites/spr_slider_rider/spr_slider_rider.yy",},"order":7,},

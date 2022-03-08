@@ -178,13 +178,6 @@ function tool_line() {
 			if line_circle_intersection(prev_pos[0], prev_pos[1], this_pos[0], this_pos[1], _mouse.x, _mouse.y, max(0.75, 8 * zm)) {
 				line_mouse_col = i;
 		}
-		
-		var wid = line_mouse_col == i ? 2.5 : 1.5;
-		
-		draw_set_color(c_black);
-		draw_line_width(prev_pos[0], prev_pos[1], this_pos[0], this_pos[1], (wid + 2.5) * zm);
-		draw_set_color(c_white);
-		draw_line_width(prev_pos[0], prev_pos[1], this_pos[0], this_pos[1], wid * zm);
 	}
 	
 	for(var i = 1; i < points_len+1; i++) {

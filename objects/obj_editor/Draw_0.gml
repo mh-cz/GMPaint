@@ -22,36 +22,12 @@ if _current_layer > -1 {
 		pasted_selection();
 	}
 	else switch(_current_tool) {
-	
-		case _tool.brush:
-			tool_brush();
-			//options_brush();
-			break;
-		
-		case _tool.line:
-			tool_line();
-			//options_line();
-			break;
-		
-		case _tool.fill:
-			tool_fill();
-			//options_fill();
-			break;
-	
-		case _tool.eraser:
-			tool_eraser();
-			//options_eraser();
-			break;
-
-		case _tool.pipette:
-			tool_pipette();
-			//options_pipette();
-			break;
-		
-		case _tool.area_select:
-			tool_area();
-			//options_pipette();
-			break;
+		case _tool.brush: tool_brush(); break;
+		case _tool.line: tool_line(); break;
+		case _tool.fill: tool_fill(); break;
+		case _tool.eraser: tool_eraser(); break;
+		case _tool.pipette: tool_pipette(); break;
+		case _tool.area_select: tool_area(); break;
 	}
 	
 	gpu_set_blendmode_ext(bm_one, bm_inv_src_alpha);

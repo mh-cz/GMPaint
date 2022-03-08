@@ -35,15 +35,13 @@ function tool_brush() {
 		gpu_set_blendmode_ext(bm_one, bm_inv_src_alpha);
 		surface_reset_target();
 		
-		shader_set(shd_limit_to_area);
-		texture_set_stage(shader_get_sampler_index(shd_limit_to_area, "area"), surface_get_texture(_area_surf));
-		
 		surface_set_target(_alpha_surf);
 		draw_clear_alpha(c_black, 0);
+		shader_set(shd_limit_to_area);
+		texture_set_stage(shader_get_sampler_index(shd_limit_to_area, "area"), surface_get_texture(_area_surf));
 		draw_surface_ext(_draw_surf, 0, 0, 1, 1, 0, c_white, _brush.col[3]);
-		surface_reset_target();
-		
 		shader_reset();
+		surface_reset_target();
 	}
 	
 	gpu_set_blendmode(bm_normal);

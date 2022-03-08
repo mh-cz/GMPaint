@@ -36,4 +36,20 @@ function make_inputs() {
 	input_set_dimensions("layer name", 110, 24);
 	input_set_text_padding("layer name", 4);
 	input_set_font("layer name", font_open_sans_9);
+	
+	// TOOL OPTIONS
+	input_create("4 numbers");
+	input_set_max_chars("4 numbers", 4);
+	input_set_bkg_color("4 numbers", c1);
+	input_set_focused_bkg_color("4 numbers", c2);
+	input_set_dimensions("4 numbers", 42, 24);
+	input_set_text_padding("4 numbers", 2);
+	input_set_font("4 numbers", font_open_sans_11);
+	
+	input_copy("4 numbers", "brush size");
+	input_copy("4 numbers", "brush falloff");
+	input_copy("4 numbers", "brush spacing");
+	input_copy("4 numbers", "brush weight");
+	input_copy("4 numbers", "line tension");
+	input_copy("4 numbers", "fill toleration");
 }

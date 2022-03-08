@@ -64,16 +64,6 @@ function input_delete(input_id) {
 	global.input_map[? input_id] = 0;
 }
 
-/// input_draw(input_id, x, y)
-// 
-// 	input_id	string
-// 	x	inputbox x position, real
-// 	y	inputbox y position, real
-// 
-// call in any draw or draw GUI event
-//
-/// GMLscripts.com/license
-
 function input_draw(input_id, x, y, mx, my) {
 	
 	var s = global.input_map[? input_id];

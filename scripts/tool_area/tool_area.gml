@@ -23,7 +23,7 @@ function tool_area() {
 		if !keyboard_check(vk_control) and !keyboard_check(vk_shift) clear_surf(_area_surf);
 	}
 	
-	if mouse_check_button(mb_left) and _brush.moved and !_mouse_over_gui {
+	if mouse_check_button(mb_left) and !_mouse_over_gui {
 		
 		if _area_select.mode == 0 {
 			

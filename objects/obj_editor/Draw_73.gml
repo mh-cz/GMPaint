@@ -1,5 +1,8 @@
 var off = (_brush.size % 2 == 1) ? 0.5 : 1;
 
+draw_set_color(c_black);
+draw_rectangle(0, 0, _paper_res.w - 1, _paper_res.h - 1, true);
+
 switch(_current_tool) {
 	
 	case _tool.fill:
@@ -12,7 +15,7 @@ switch(_current_tool) {
 	case _tool.eraser:
 	case _tool.line:
 	
-		if !mouse_check_button(mb_left) and surface_exists(_brush.brush_surf) {
+		if (!mouse_check_button(mb_left) or _mouse_over_gui) and surface_exists(_brush.brush_surf) {
 			gpu_set_blendmode_ext(bm_one, bm_inv_src_alpha);
 			draw_surface_ext(_brush.brush_surf, _mouse.x - _brush.size div 2, _mouse.y - _brush.size div 2,
 							 1, 1, 0, rgba2c(_brush.col, 255, true), _brush.col[3]);
@@ -20,7 +23,6 @@ switch(_current_tool) {
 		}
 		
 		draw_set_color(c_black);
-		draw_rectangle(0, 0, _paper_res.w - 1, _paper_res.h - 1, true);
 		draw_rectangle(_mouse.x, _mouse.y, _mouse.x, _mouse.y, true);
 		draw_circle(_brush.wmx - off, _brush.wmy - off, _brush.size/2, true);
 		
