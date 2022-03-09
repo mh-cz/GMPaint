@@ -31,7 +31,7 @@ camera_set_view_size(view_camera[0], screen.w * _zoom, screen.h * _zoom);
 if keyboard_check(vk_control) {
 	
 	if keyboard_check_pressed(ord("S")) {
-		save_all_layers();
+		save();
 	}
 	else if keyboard_check_pressed(ord("A")) {
 		clear_area_select();

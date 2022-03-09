@@ -40,6 +40,7 @@ function init() {
 		globalvar _mouse_over_menu;
 		globalvar _area_select;
 		globalvar _pasted_selection;
+		globalvar _fpath;
 		
 		enum _tool { none = -1, brush = 0, line = 1, fill = 2, eraser = 3, pipette = 4, area_select = 5 };
 		
@@ -89,8 +90,10 @@ function init() {
 		_color_wheel = { surf: -1, size_surf: -1, h: 0, s: 0, v: 1, r: 1, g: 1, b: 1, a: 1, hex: "#FFFFFF",
 						 pos: [-1, -1], msi: false, prev_rgba: [1, 1, 1, 1], wy: -0.5 };
 		
-		_bottom_bar = { h: 20, left_text: "", right_text: "" };
+		_bottom_bar = { h: 20, rt_time: -1, right_text: "", lt_time: -1, left_text: "", };
 		_upper_bar = { h: 24 };
+		
+		_this = { save_path: "" };
 		
 		create_camera();
 		cam_x = _paper_res.w/2;
@@ -111,8 +114,9 @@ function init() {
 	
 		set_cursor(spr_cursor, 1);
 	
-		_filename = "new_paper";
+		_filename = "";
 		_file_ext = ".gmp";
+		_fpath = working_directory+"temp";
 	
 		can_reset_cursor = false;
 		

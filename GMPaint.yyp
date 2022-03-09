@@ -49,6 +49,7 @@
     {"id":{"name":"tool_area","path":"scripts/tool_area/tool_area.yy",},"order":22,},
     {"id":{"name":"tool_brush","path":"scripts/tool_brush/tool_brush.yy",},"order":1,},
     {"id":{"name":"make_menus","path":"scripts/make_menus/make_menus.yy",},"order":20,},
+    {"id":{"name":"draw_text_outlined","path":"scripts/draw_text_outlined/draw_text_outlined.yy",},"order":25,},
     {"id":{"name":"spr_checkers2","path":"sprites/spr_checkers2/spr_checkers2.yy",},"order":12,},
     {"id":{"name":"rm_editor","path":"rooms/rm_editor/rm_editor.yy",},"order":0,},
   ],
