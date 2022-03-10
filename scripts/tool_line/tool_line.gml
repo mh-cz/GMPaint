@@ -106,36 +106,39 @@ function tool_line() {
 	
 	gpu_set_blendmode_ext(bm_one, bm_inv_src_alpha);
 	
-	surface_set_target(_brush.brush_surf);
-	draw_clear_alpha(c_black, 0);
-	shader_set(shd_brush);
-	shader_set_uniform_f(shader_get_uniform(shd_brush, "fo"), _brush.falloff);
-	draw_surface(_brush.size_surf, 0, 0);
-	shader_reset();
-	surface_reset_target();
-	
-	surface_set_target(_mask_surf);
-	draw_clear_alpha(c_black, 0);
-	line_curve(list, _line.tension, _line.closed);
-	surface_reset_target();
-	
-	surface_set_target(_draw_surf);
-	draw_clear_alpha(c_black, 0);
-	draw_surface(_mask_surf, 0, 0);
-	gpu_set_blendmode(bm_normal);
-	gpu_set_colorwriteenable(true, true, true, false);
-	draw_sprite_stretched_ext(spr_1px, 0, 0, 0, _paper_res.w, _paper_res.h, rgba2c(_brush.col, 255), 1);
-	gpu_set_colorwriteenable(true, true, true, true);
-	gpu_set_blendmode_ext(bm_one, bm_inv_src_alpha);
-	surface_reset_target();
-			
-	surface_set_target(_alpha_surf);
-	draw_clear_alpha(c_black, 0);
-	shader_set(shd_limit_to_area);
-	texture_set_stage(shader_get_sampler_index(shd_limit_to_area, "area"), surface_get_texture(_area_surf));
-	draw_surface_ext(_draw_surf, 0, 0, 1, 1, 0, c_white, _brush.col[3]);
-	shader_reset();
-	surface_reset_target();
+	if mouse_check_button(mb_left) or mouse_check_button(mb_right) {
+		
+		surface_set_target(_brush.brush_surf);
+		draw_clear_alpha(c_black, 0);
+		shader_set(shd_brush);
+		shader_set_uniform_f(shader_get_uniform(shd_brush, "fo"), _brush.falloff);
+		draw_surface(_brush.size_surf, 0, 0);
+		shader_reset();
+		surface_reset_target();
+		
+		surface_set_target(_mask_surf);
+		draw_clear_alpha(c_black, 0);
+		line_curve(list, _line.tension, _line.closed);
+		surface_reset_target();
+		
+		surface_set_target(_draw_surf);
+		draw_clear_alpha(c_black, 0);
+		draw_surface(_mask_surf, 0, 0);
+		gpu_set_blendmode(bm_normal);
+		gpu_set_colorwriteenable(true, true, true, false);
+		draw_sprite_stretched_ext(spr_1px, 0, 0, 0, _paper_res.w, _paper_res.h, rgba2c(_brush.col, 255), 1);
+		gpu_set_colorwriteenable(true, true, true, true);
+		gpu_set_blendmode_ext(bm_one, bm_inv_src_alpha);
+		surface_reset_target();
+		
+		surface_set_target(_alpha_surf);
+		draw_clear_alpha(c_black, 0);
+		shader_set(shd_limit_to_area);
+		texture_set_stage(shader_get_sampler_index(shd_limit_to_area, "area"), surface_get_texture(_area_surf));
+		draw_surface_ext(_draw_surf, 0, 0, 1, 1, 0, c_white, _brush.col[3]);
+		shader_reset();
+		surface_reset_target();
+	}
 	
 	gpu_set_blendmode(bm_normal);
 	
@@ -198,15 +201,17 @@ function tool_line() {
 		var plus = mouse_over_point == i-1 ? 2 : 0;
 		var wid = line_mouse_col == i ? 2.5 : 1.5;
 		
+		draw_set_alpha(0.33);
 		draw_set_color(c_black);
-		draw_line_width(prev_pos[0], prev_pos[1], this_pos[0], this_pos[1], (wid + 2.5) * zm);
+		draw_line_width(prev_pos[0]-0.5, prev_pos[1]-0.5, this_pos[0]-0.5, this_pos[1]-0.5, (wid + 2.5) * zm);
 		draw_set_color(c_white);
-		draw_line_width(prev_pos[0], prev_pos[1], this_pos[0], this_pos[1], wid * zm);
+		draw_line_width(prev_pos[0]-0.5, prev_pos[1]-0.5, this_pos[0]-0.5, this_pos[1]-0.5, wid * zm);
 		
+		draw_set_alpha(1);
 		draw_set_color(c_black);
-		draw_circle_ext(prev_pos[0]+1, prev_pos[1]+1, (3.5 + plus) * zm, 2 * zm, 32);
+		draw_circle_ext(prev_pos[0], prev_pos[1], (3.5 + plus) * zm, 2 * zm, 16);
 		draw_set_color(c_white);
-		draw_circle_ext(prev_pos[0]+1, prev_pos[1]+1, (2.5 + plus) * zm, 1 * zm, 32);
+		draw_circle_ext(prev_pos[0], prev_pos[1], (2.5 + plus) * zm, 1 * zm, 16);
 	}
 	
 	if !_mouse_over_gui {

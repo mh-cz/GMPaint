@@ -58,7 +58,7 @@ function draw_layer_select(x, y) {
 		draw_sprite_part(spr_bkg_squares, 1, 0, 0, imgw, imgh, xx+bmw, yy+bmh);
 		draw_surface_stretched(layer_data.s, xx+bmw, yy+bmh, imgw, imgh);
 		
-		if mouse_check_button(mb_left) and _current_layer == i
+		if (mouse_check_button(mb_left) and _current_layer == i) or _current_tool == _tool.line
 			draw_surface_stretched(_alpha_surf, xx+bmw, yy+bmh, imgw, imgh);
 		
 		if point_in_rectangle(device_mouse_x_to_gui(0), device_mouse_y_to_gui(0), x+xx+base+10, y+yy+34, x+xx+base+10+20, y+yy+34+20) {

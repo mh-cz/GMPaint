@@ -10,21 +10,7 @@ function tool_brush() {
 	shader_reset();
 	surface_reset_target();
 	
-	if mouse_check_button_pressed(mb_left) {
-		_brush.moved = true;
-		_brush.pds_wm = _brush.step;
-	}
-	
-	if mouse_check_button(mb_left) and _brush.moved and !_mouse_over_gui {
-		
-		surface_set_target(_mask_surf);
-		for(var i = 0; i < _brush.pds_wm; i += _brush.step) {
-			draw_surface(_brush.brush_surf,
-				_brush.pwmx - _brush.size/2 + lengthdir_x(i, _brush.pdr_wm),
-				_brush.pwmy - _brush.size/2 + lengthdir_y(i, _brush.pdr_wm));
-		}
-		surface_reset_target();
-		
+	var combine_surfs = function() {
 		surface_set_target(_draw_surf);
 		draw_clear_alpha(c_black, 0);
 		draw_surface(_mask_surf, 0, 0);
@@ -42,6 +28,30 @@ function tool_brush() {
 		draw_surface_ext(_draw_surf, 0, 0, 1, 1, 0, c_white, _brush.col[3]);
 		shader_reset();
 		surface_reset_target();
+	}
+	
+	if !_mouse_over_gui {
+		
+		if mouse_check_button_pressed(mb_left) and !_brush.moved {
+		
+			surface_set_target(_mask_surf);
+			draw_surface(_brush.brush_surf, _brush.pwmx - _brush.size/2, _brush.pwmy - _brush.size/2);
+			surface_reset_target();
+		
+			combine_surfs();
+		}
+		else if mouse_check_button(mb_left) and _brush.moved {
+		
+			surface_set_target(_mask_surf);
+			for(var i = 0; i < _brush.pds_wm; i += _brush.step) {
+				draw_surface(_brush.brush_surf,
+					_brush.pwmx - _brush.size/2 + lengthdir_x(i, _brush.pdr_wm),
+					_brush.pwmy - _brush.size/2 + lengthdir_y(i, _brush.pdr_wm));
+			}
+			surface_reset_target();
+		
+			combine_surfs();
+		}
 	}
 	
 	gpu_set_blendmode(bm_normal);

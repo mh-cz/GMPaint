@@ -67,3 +67,4 @@ else if can_reset_cursor {
 	window_set_cursor(cr_default);
 }
 
+window_set_caption("GMPaint > "+(_filename != "" ? _filename : "untitled"));

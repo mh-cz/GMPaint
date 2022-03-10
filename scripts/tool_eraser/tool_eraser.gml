@@ -10,22 +10,28 @@ function tool_eraser() {
 	shader_reset();
 	surface_reset_target();
 	
-	if mouse_check_button_pressed(mb_left) {
-		_brush.moved = true;
-		_brush.pds_wm = _brush.step;
-	}
-	
-	if mouse_check_button(mb_left) and _brush.moved and !_mouse_over_gui {
+	if !_mouse_over_gui {
 		
-		gpu_set_blendmode(bm_subtract);
-		surface_set_target(_layers[| _current_layer].s);
-		for(var i = 0; i < _brush.pds_wm; i += _brush.step) {
-			draw_surface_ext(_brush.brush_surf,
-				_brush.pwmx - _brush.size/2 + lengthdir_x(i, _brush.pdr_wm),
-				_brush.pwmy - _brush.size/2 + lengthdir_y(i, _brush.pdr_wm), 1, 1, 0, 
+		if mouse_check_button_pressed(mb_left) and !_brush.moved {
+			
+			gpu_set_blendmode(bm_subtract);
+			surface_set_target(_layers[| _current_layer].s);
+			draw_surface_ext(_brush.brush_surf, _brush.pwmx - _brush.size/2, _brush.pwmy - _brush.size/2, 1, 1, 0, 
 				make_color_hsv(0, 0, _brush.col[3] * 255), _brush.col[3]);
+			surface_reset_target();
 		}
-		surface_reset_target();
+		else if mouse_check_button(mb_left) and _brush.moved {
+			
+			gpu_set_blendmode(bm_subtract);
+			surface_set_target(_layers[| _current_layer].s);
+			for(var i = 0; i < _brush.pds_wm; i += _brush.step) {
+				draw_surface_ext(_brush.brush_surf,
+					_brush.pwmx - _brush.size/2 + lengthdir_x(i, _brush.pdr_wm),
+					_brush.pwmy - _brush.size/2 + lengthdir_y(i, _brush.pdr_wm), 1, 1, 0, 
+					make_color_hsv(0, 0, _brush.col[3] * 255), _brush.col[3]);
+			}
+			surface_reset_target();
+		}
 	}
 	
 	gpu_set_blendmode(bm_normal);

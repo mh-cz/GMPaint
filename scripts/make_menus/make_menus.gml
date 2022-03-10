@@ -1,19 +1,25 @@
 function make_menus() {
 	
-	var buttons = ds_list_create();
-	var ls = _langstr[$ _language];
+	draw_set_font(font_open_sans_9);
 	
-	ds_list_add(buttons, { text: ls[$ "menu_new_file"], on_click: function() {}});
-	ds_list_add(buttons, { text: ls[$ "menu_open_file"], on_click: function() {}});
-	ds_list_add(buttons, { text: ls[$ "menu_import_image"], on_click: function() {}});
+	var buttons = ds_list_create();
+	
+	ds_list_add(buttons, { text: _langstr[$ _language].menu_new_file, on_click: function() {}});
+	ds_list_add(buttons, { text: _langstr[$ _language].menu_open_file, on_click: function() { load(); }});
+	ds_list_add(buttons, { text: _langstr[$ _language].menu_import_image, on_click: function() {}});
+	ds_list_add(buttons, { text: _langstr[$ _language].menu_export_image, on_click: function() {}});
+	ds_list_add(buttons, { text: _langstr[$ _language].menu_save, on_click: function() { save(); }});
+	ds_list_add(buttons, { text: _langstr[$ _language].menu_save_as, on_click: function() { save_as(); }});
 	
 	var maxlen = 0;
-	foreach "btn" in buttons as_list maxlen = max(string_width(btn.text), maxlen);
+	foreach "btn" in buttons as_list maxlen = max(string_width(btn.text)+16, maxlen);
 	
-	ds_list_add(_menu_list, { text: ls[$ "menu_file"], w: string_width(ls[$ "menu_file"]), b: buttons, bw: maxlen });
+	ds_list_add(_menu_list, { text: _langstr[$ _language].menu_file, w: string_width(_langstr[$ _language].menu_file)+10, b: buttons, bw: maxlen });
 }
 
 function draw_upper_menu() {
+	
+	draw_set_font(font_open_sans_9);
 	
 	var h = _upper_bar.h;
 	var yy = 0;

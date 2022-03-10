@@ -11,10 +11,9 @@ _brush_surf = check_surf(_brush_surf, _brush.size, _brush.size);
 _brush.brush_surf = check_surf(_brush.brush_surf, _brush.size, _brush.size);
 _brush.size_surf = check_surf(_brush.size_surf, _brush.size, _brush.size);
 
-var use_weight = mouse_check_button(mb_left)
-				 and (_current_tool == _tool.brush or _current_tool == _tool.eraser);
+var use_weight = mouse_check_button(mb_left) and (_current_tool == _tool.brush or _current_tool == _tool.eraser);
 
-if _brush.moved {
+if _brush.moved or mouse_check_button_pressed(mb_left) {
 	_brush.pwmx = _brush.wmx;
 	_brush.pwmy = _brush.wmy;
 }

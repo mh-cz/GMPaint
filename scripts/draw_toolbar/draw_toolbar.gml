@@ -29,18 +29,20 @@ function draw_toolbar(x, y, max_xc) {
 				_current_tool = i;
 			}
 			
-			var t = "";
+			if !_mouse_started_on_paper and !_mouse_over_menu {
+				
+				var t = "";
+				switch(i) {
+					case 0: t = _langstr[$ _language].toolbar_tool_brush; break;
+					case 1: t = _langstr[$ _language].toolbar_tool_line; break;
+					case 2: t = _langstr[$ _language].toolbar_tool_fill; break;
+					case 3: t = _langstr[$ _language].toolbar_tool_eraser; break;
+					case 4: t = _langstr[$ _language].toolbar_tool_pipette; break;
+					case 5: t = _langstr[$ _language].toolbar_tool_area; break;
+				}
 			
-			switch(i) {
-				case 0: t = _langstr[$ _language].toolbar_tool_brush; break;
-				case 1: t = _langstr[$ _language].toolbar_tool_line; break;
-				case 2: t = _langstr[$ _language].toolbar_tool_fill; break;
-				case 3: t = _langstr[$ _language].toolbar_tool_eraser; break;
-				case 4: t = _langstr[$ _language].toolbar_tool_pipette; break;
-				case 5: t = _langstr[$ _language].toolbar_tool_area; break;
+				draw_text_outlined(x-16, y-4+(len/max_xc)*36, t);
 			}
-			
-			draw_text_outlined(x-16, y-4+(len/max_xc)*36, t);
 		}
 		
 		if ++xc > max_xc-1 {
