@@ -7,6 +7,7 @@
     {"id":{"name":"layer_join_below","path":"scripts/layer_join_below/layer_join_below.yy",},"order":18,},
     {"id":{"name":"spr_layer_icons","path":"sprites/spr_layer_icons/spr_layer_icons.yy",},"order":10,},
     {"id":{"name":"on_switch_tool","path":"scripts/on_switch_tool/on_switch_tool.yy",},"order":16,},
+    {"id":{"name":"undo_redo","path":"scripts/undo_redo/undo_redo.yy",},"order":26,},
     {"id":{"name":"spr_toolbar_icon_ramecek","path":"sprites/spr_toolbar_icon_ramecek/spr_toolbar_icon_ramecek.yy",},"order":4,},
     {"id":{"name":"shd_color_wheel","path":"shaders/shd_color_wheel/shd_color_wheel.yy",},"order":5,},
     {"id":{"name":"shd_premultiply_alpha","path":"shaders/shd_premultiply_alpha/shd_premultiply_alpha.yy",},"order":0,},

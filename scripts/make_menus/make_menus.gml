@@ -9,7 +9,7 @@ function make_menus() {
 	ds_list_add(buttons, { text: _langstr[$ _language].menu_import_image, on_click: function() {}});
 	ds_list_add(buttons, { text: _langstr[$ _language].menu_export_image, on_click: function() {}});
 	ds_list_add(buttons, { text: _langstr[$ _language].menu_save, on_click: function() { save(); }});
-	ds_list_add(buttons, { text: _langstr[$ _language].menu_save_as, on_click: function() { save_as(); }});
+	ds_list_add(buttons, { text: _langstr[$ _language].menu_save_as, on_click: function() { save(true); }});
 	
 	var maxlen = 0;
 	foreach "btn" in buttons as_list maxlen = max(string_width(btn.text)+16, maxlen);

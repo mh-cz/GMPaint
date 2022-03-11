@@ -40,8 +40,9 @@ function init() {
 	globalvar _pasted_selection;
 	globalvar _fpath;
 	globalvar _last_fpath;
-		
-	globalvar restart;
+	
+	globalvar undo_counter;	
+	globalvar redo_counter;
 		
 	enum _tool { none = -1, brush = 0, line = 1, fill = 2, eraser = 3, pipette = 4, area_select = 5 };
 		
@@ -90,10 +91,10 @@ function init() {
 		
 	_color_wheel = { surf: -1, size_surf: -1, h: 0, s: 0, v: 1, r: 1, g: 1, b: 1, a: 1, hex: "#FFFFFF",
 						pos: [-1, -1], msi: false, prev_rgba: [1, 1, 1, 1], wy: -0.5 };
-		
+	
 	_bottom_bar = { h: 20, rt_time: -1, right_text: "", lt_time: -1, left_text: "", };
 	_upper_bar = { h: 24 };
-		
+	
 	create_camera();
 	cam_x = _paper_res.w/2;
 	cam_y = _paper_res.h/2;
@@ -124,6 +125,11 @@ function init() {
 	make_menus();
 	_sel_menu_opt = "";
 	_mouse_over_menu = false;
+	
+	old = [_fpath, _filename];
+	
+	undo_counter = 0;
+	redo_counter = 0;
 }
 
 function get_mouse_pos() {

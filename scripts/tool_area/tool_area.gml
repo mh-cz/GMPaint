@@ -111,7 +111,8 @@ function tool_area() {
 		clear_surf([_mask_surf, _draw_surf, _alpha_surf]);
 		gpu_set_blendmode(bm_normal);
 		
-		save_layer();
+		//save_layer();
+		
 	}
 }
 
