@@ -47,10 +47,8 @@ function on_switch_tool(nt) {
 			surface_set_target(_draw_surf);
 			draw_clear_alpha(c_black, 0);
 			
-			var num = ds_list_size(_layers)-1;
-			for(var l = num; l > -1; l--) {
-				var lr = _layers[| l];
-				if !lr.hidden draw_surface_ext(lr.s, 0, 0, 1, 1, 0, make_color_hsv(0, 0, lr.layer_alpha*255), lr.layer_alpha);
+			foreach "l" in _layers as_list {
+				if !l.hidden draw_surface_ext(l.s, 0, 0, 1, 1, 0, make_color_hsv(0, 0, l.layer_alpha*255), l.layer_alpha);
 			}
 			
 			surface_reset_target();

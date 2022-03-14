@@ -1,6 +1,3 @@
 // LOAD
 
-load_settings(_fpath);
-load_all_layers(_fpath);
-
-set_bottom_right_text("Loaded: "+_fpath, 2);
+if load_from_file() set_bottom_right_text("Loaded: "+_fpath+_file_ext, 2);

@@ -11,11 +11,6 @@ function tool_area() {
 		draw_surface(_brush.size_surf, 0, 0);
 		shader_reset();
 		surface_reset_target();
-	
-		if mouse_check_button_pressed(mb_left) {
-			_brush.moved = true;
-			_brush.pds_wm = _brush.step;
-		}
 	}
 	
 	if mouse_check_button_pressed(mb_left) and !_mouse_over_gui {

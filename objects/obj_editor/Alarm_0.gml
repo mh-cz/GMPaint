@@ -1,1 +1,1 @@
-load_all_layers();
+load_from_file();

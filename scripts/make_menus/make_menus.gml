@@ -26,8 +26,8 @@ function draw_upper_menu() {
 	var xx = 8;
 	var text_offx = 4;
 	
-	var g1 = merge_color(c_dkgray, c_gray, 0.15);
-	var g2 = merge_color(c_dkgray, c_gray, 0.5);
+	var c1 = merge_color(c_dkgray, c_gray, 0.15);
+	var c2 = merge_color(c_dkgray, c_gray, 0.5);
 	
 	draw_set_valign(1);
 	
@@ -52,12 +52,10 @@ function draw_upper_menu() {
 				
 				if point_in_rectangle(device_mouse_x_to_gui(0), device_mouse_y_to_gui(0), r[0], r[1], r[2], r[3]) {
 					_mouse_over_menu = true;
-					draw_set_color(g1);
-					if mouse_check_button_pressed(mb_left) {
-						btn.on_click();
-					}
+					draw_set_color(c1);
+					if mouse_check_button_pressed(mb_left) btn.on_click();
 				}
-				else draw_set_color(g2);
+				else draw_set_color(c2);
 			
 				draw_rectangle(r[0], r[1], r[2], r[3], false);
 			

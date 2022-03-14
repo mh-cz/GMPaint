@@ -41,13 +41,14 @@ function init() {
 	globalvar _fpath;
 	globalvar _last_fpath;
 	
-	globalvar undo_counter;	
-	globalvar redo_counter;
-		
+	globalvar _undo_counter;	
+	globalvar _redo_counter;
+	globalvar _undo_list;
+	
 	enum _tool { none = -1, brush = 0, line = 1, fill = 2, eraser = 3, pipette = 4, area_select = 5 };
-		
+	
 	_language = "cz";
-		
+	
 	lang_strings();
 	input_init();
 	make_inputs();
@@ -57,14 +58,14 @@ function init() {
 		
 	screen = { w: window_get_width(), h: window_get_height() };
 	window_resize();
-		
+	
 	_current_tool = _tool.brush;
 	_layers = ds_list_create();
 	_layer_id_counter = 0;
 	_current_layer = -1;
 		
 	layer_add(c_grey, 1);
-		
+	
 	_layer_select = { surf: -1, w: 200, h: 400, ypos: 0, ypos_smooth: 0 };
 	
 	_brush = { size: 20, brush_surf: -1, size_surf: -1, col: [1, 1, 1, 1], falloff: 1.2, tex: -1, tex_mask: -1,
@@ -108,7 +109,7 @@ function init() {
 	
 	_mouse_over_gui = false;
 	_mouse_started_on_paper = false;
-		
+	
 	_selected_input = "";
 	_selected_slider = "";
 	
@@ -119,17 +120,23 @@ function init() {
 	_fpath = working_directory+"temp";
 	_last_fpath = "";
 		
-	can_reset_cursor = false;
+	obj_editor.can_reset_cursor = false;
 		
 	_menu_list = ds_list_create();
 	make_menus();
 	_sel_menu_opt = "";
 	_mouse_over_menu = false;
 	
-	old = [_fpath, _filename];
+	obj_editor.old = [_fpath, _filename];
 	
-	undo_counter = 0;
-	redo_counter = 0;
+	_undo_counter = 0;
+	_redo_counter = 0;
+	_undo_list = ds_list_create();
+	
+	// auto open from file extension
+	if string_pos("Runner.exe", parameter_string(0)) == 0 {
+		if parameter_count() > 1 obj_editor.alarm[4] = 10;
+	}
 }
 
 function get_mouse_pos() {
@@ -180,10 +187,12 @@ function clear_surf(s) {
 		draw_clear_alpha(c_black, 0);
 		surface_reset_target();
 	}
-	else for(var i = 0; i < array_length(s); i++) {
-		surface_set_target(s[i]);
-		draw_clear_alpha(c_black, 0);
-		surface_reset_target();
+	else {
+		foreach "sf" in s as_array {
+			surface_set_target(sf);
+			draw_clear_alpha(c_black, 0);
+			surface_reset_target();
+		}
 	}
 }
 
@@ -191,8 +200,8 @@ function free_surf(s) {
 	if !is_array(s) {
 		if surface_exists(s) surface_free(s);
 	}
-	else for(var i = 0; i < array_length(s); i++) {
-		if surface_exists(s[i]) surface_free(s[i]);
+	else {
+		foreach "sf" in s as_array if surface_exists(sf) surface_free(sf);
 	}
 }
 

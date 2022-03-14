@@ -23,3 +23,5 @@ _brush.step = _brush.size * _brush.step_scale;
 _brush.pdr_wm = point_direction(_brush.pwmx, _brush.pwmy, _brush.wmx, _brush.wmy);
 _brush.pds_wm = point_distance(_brush.pwmx, _brush.pwmy, _brush.wmx, _brush.wmy);
 _brush.moved = _brush.pds_wm >= _brush.step;
+
+foreach "l" in _layers as_list l.s = check_surf(l.s, _paper_res.w, _paper_res.h, l.c, l.a);

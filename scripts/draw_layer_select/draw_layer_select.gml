@@ -33,9 +33,8 @@ function draw_layer_select(x, y) {
 	surface_set_target(_layer_select.surf);
 	draw_clear(c_dkgray);
 	
-	for(var i = 0; i < ds_list_size(_layers); i++) {
+	foreach ["i","l"] in _layers as_list {
 		
-		var layer_data = _layers[| i];
 		var xx = 5;
 		var yy = 5 + _layer_select.ypos_smooth + row_h * (ds_list_size(_layers)-1 - i);
 		
@@ -56,7 +55,7 @@ function draw_layer_select(x, y) {
 		}
 		
 		draw_sprite_part(spr_bkg_squares, 1, 0, 0, imgw, imgh, xx+bmw, yy+bmh);
-		draw_surface_stretched(layer_data.s, xx+bmw, yy+bmh, imgw, imgh);
+		draw_surface_stretched(l.s, xx+bmw, yy+bmh, imgw, imgh);
 		
 		if (mouse_check_button(mb_left) and _current_layer == i) or _current_tool == _tool.line
 			draw_surface_stretched(_alpha_surf, xx+bmw, yy+bmh, imgw, imgh);
@@ -66,27 +65,27 @@ function draw_layer_select(x, y) {
 			draw_set_color(c_gray);
 			draw_rectangle(xx+base+10+1, yy+34+1, xx+base+10+20-2, yy+34+20-2, false);
 			
-			if mouse_check_button_pressed(mb_left) layer_data.hidden = !layer_data.hidden;
+			if mouse_check_button_pressed(mb_left) l.hidden = !l.hidden;
 		}
 		
 		gpu_set_tex_filter(true);
 		draw_sprite_ext(spr_alpha, 2, xx+base+45+74, yy+32+3, 1.1, 0.82, -90, c_white, 1);
 		
-		layer_data.layer_alpha = (round((h_slider(xx+base+37, yy+32+1, 82, 20, layer_data.layer_alpha, 
-			"L_ALPHA"+string(layer_data.l_id), device_mouse_x_to_gui(0)-x, device_mouse_y_to_gui(0)-y)*255)/5)*5)/255;
+		l.layer_alpha = (round((h_slider(xx+base+37, yy+32+1, 82, 20, l.layer_alpha, 
+			"L_ALPHA"+string(l.l_id), device_mouse_x_to_gui(0)-x, device_mouse_y_to_gui(0)-y)*255)/5)*5)/255;
 		
 		draw_set_color(c_dkgray);
 		draw_set_font(font_open_sans_9)
 		draw_set_halign(1);
-		draw_text(xx+base+37+41, yy+36, round(layer_data.layer_alpha * 255));
+		draw_text(xx+base+37+41, yy+36, round(l.layer_alpha * 255));
 		draw_set_halign(0);
 		gpu_set_tex_filter(false);
 		
-		draw_sprite(spr_layer_visibility, real(layer_data.hidden), xx+base+10, yy+34);
+		draw_sprite(spr_layer_visibility, real(l.hidden), xx+base+10, yy+34);
 		
-		var inp = "L_NAME_"+string(layer_data.l_id);
+		var inp = "L_NAME_"+string(l.l_id);
 		input_draw(inp, xx+base+10, yy+4, device_mouse_x_to_gui(0)-x, device_mouse_y_to_gui(0)-y);
-		layer_data.name = input_get_text(inp);
+		l.name = input_get_text(inp);
 		
 		draw_set_color(c_black);
 		draw_rectangle(xx+bmw, yy+bmh, xx+bpw-1, yy+bph-1, true);

@@ -4,3 +4,5 @@ if mouse_check_button_pressed(mb_left) _mouse_started_on_paper = !_mouse_over_gu
 if mouse_check_button(mb_left) {
 	_mouse_over_gui = !_mouse_started_on_paper;
 }
+
+undo_save_handler();

@@ -1,9 +1,6 @@
 // SAVE AS
 
-save_settings(_fpath, _filename);
-save_all_layers(_fpath);
+if save_into_file() set_bottom_right_text("Saved as: "+_fpath+_file_ext, 2);
 
-set_bottom_right_text("Saved as: "+_fpath, 2);
-
-_filename = old[0];
-_fpath = old[1];
+_fpath = old[0];
+_filename = old[1];

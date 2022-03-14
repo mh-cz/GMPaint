@@ -1,27 +1,21 @@
 function save(as = false) { // SAVE
 	
 	if as {
-		old = [_fpath, _filename];
-		_filename = "";
+		obj_editor.old = [_fpath, _filename];
 		_fpath = "";
+		_filename = "";
 	}
 	
 	if _filename == "" {
-		var new_path = get_save_filename_ext(_file_ext, _langstr[$ _language].new_file, _last_fpath, _langstr[$ _language].save_caption);
+		var new_path = get_save_filename_ext(_file_ext, _langstr[$ _language].new_file+_file_ext, _last_fpath, _langstr[$ _language].save_caption);
 		if new_path == "" return false;
 		_fpath = new_path;
 		
 		var plen = string_length(_fpath)
 		var elen = string_length(_file_ext);
-		
+
 		if string_copy(_fpath, plen-elen+1, elen) == _file_ext {
-			for(var i = plen; i > 0; i--) {
-				if string_char_at(_fpath, i) == "\\" {
-					_fpath = string_copy(_fpath, 1, i-1);
-					directory_destroy(_fpath);
-					break;
-				}
-			}
+			_fpath = string_delete(_fpath, plen-elen+1, elen);
 		}
 		
 		for(var i = plen; i > 0; i--) {
@@ -36,60 +30,10 @@ function save(as = false) { // SAVE
 	
 	_last_fpath = _fpath;
 	
-	if !directory_exists(_fpath) directory_create(_fpath);
-	
-	alarm[as ? 3 : 1] = 2;
+	obj_editor.alarm[as ? 3 : 1] = 2;
 }
 
-function save_all_layers(path) {
-	
-	var buf = buffer_create(_paper_res.w * _paper_res.h * 4, buffer_fixed, 1);
-	
-	for(var i = 0; i < ds_list_size(_layers); i++) {
-		var layer_data = _layers[| i];
-		layer_data.s = check_surf(layer_data.s, _paper_res.w, _paper_res.h, layer_data.c, layer_data.a);
-		
-		buffer_seek(buf, buffer_seek_start, 0);
-		buffer_get_surface(buf, layer_data.s, 0);
-		buffer_save(buf, path+"\\"+string(i)+".l");
-	}
-	
-	buffer_delete(buf);
-	
-	save_area_select(path);
-}
-
-function save_layer(i = _current_layer, path = _fpath) {
-	/*
-	var buf = buffer_create(_paper_res.w * _paper_res.h * 4, buffer_fixed, 1);
-	
-	var layer_data = _layers[| i];
-	layer_data.s = check_surf(layer_data.s, _paper_res.w, _paper_res.h, layer_data.c, layer_data.a);
-	
-	buffer_seek(buf, buffer_seek_start, 0);
-	buffer_get_surface(buf, layer_data.s, 0);
-	buffer_save(buf, path+"\\"+string(i)+".l");
-	buffer_delete(buf);
-	
-	save_area_select(path);*/
-}
-
-function save_area_select(path) {
-	
-	var buf = buffer_create(_paper_res.w * _paper_res.h * 4, buffer_fixed, 1);
-	buffer_seek(buf, buffer_seek_start, 0);
-	buffer_get_surface(buf, _area_surf, 0);
-	buffer_save(buf, path+"\\a.s");
-	buffer_delete(buf);
-	
-	var buf = buffer_create(surface_get_width(_copy_surf) * surface_get_height(_copy_surf) * 4, buffer_fixed, 1);
-	buffer_seek(buf, buffer_seek_start, 0);
-	buffer_get_surface(buf, _copy_surf, 0);
-	buffer_save(buf, path+"\\c.s");
-	buffer_delete(buf);
-}
-
-function save_settings(path, filename) {
+function save_into_file() {
 	
 	var s = {
 		P_RES: _paper_res,
@@ -108,33 +52,62 @@ function save_settings(path, filename) {
 			HEX: _color_wheel.hex, POS: _color_wheel.pos },
 		CAM: { POS: [obj_editor.cam_x, obj_editor.cam_y], Z: _zoom },
 		FILE: { FN: _filename, FPATH: _fpath, LFPATH: _last_fpath },
-		LAYERS: [],
+		BUFS: [],
 	};
 	
 	foreach "p" in _line.points_list as_list array_push(s.LINE.POINTS, p);
-	foreach "l" in _layers as_list array_push(s.LAYERS, { C: l.c, A: l.a, L_ID: l.l_id, N: l.name, H: l.hidden, LA: l.layer_alpha });
 	
-	var f = file_text_open_write(path+"\\"+filename+_file_ext);
-	file_text_write_string(f, json_stringify(s));
-	file_text_close(f);
+	var bs =  buffer_create(10000, buffer_fixed, 1); // buffer struct
+	var bl = buffer_create(_paper_res.w * _paper_res.h * 4, buffer_fixed, 1); // buffer layer
+	var bc = buffer_create(surface_get_width(_copy_surf) * surface_get_height(_copy_surf) * 4, buffer_fixed, 1); // buffer copy surf
+	var big_buf = buffer_create(0, buffer_grow, 1); // save buffer
+	
+	var size = buffer_get_size(bs);
+	var space_for_struct = size;
+	
+	size = buffer_get_size(bl);
+	
+	foreach "l" in _layers as_list {
+		buffer_get_surface(bl, l.s, 0);
+		buffer_copy(bl, 0, size, big_buf, buffer_get_size(big_buf) + space_for_struct); space_for_struct = 0; // offset just once
+		array_push(s.BUFS, { SIZE: size, TYPE: "L", C: l.c, A: l.a, L_ID: l.l_id, N: l.name, H: l.hidden, LA: l.layer_alpha });
+	}
+	
+	buffer_get_surface(bl, _area_surf, 0);
+	buffer_copy(bl, 0, size, big_buf, buffer_get_size(big_buf) + space_for_struct); space_for_struct = 0; // just in case no layers
+	array_push(s.BUFS, { SIZE: size, TYPE: "A" });
+	
+	buffer_get_surface(bc, _copy_surf, 0);
+	size = buffer_get_size(bc);
+	buffer_copy(bc, 0, size, big_buf, buffer_get_size(big_buf));
+	array_push(s.BUFS, { SIZE: size, TYPE: "C" });
+	
+	buffer_write(bs, buffer_string, json_stringify(s));
+	buffer_copy(bs, 0, buffer_get_size(bs), big_buf, 0);
+	
+	buffer_save(big_buf, _fpath+_file_ext);
+	
+	buffer_delete(bs);
+	buffer_delete(bl);
+	buffer_delete(bc);
+	buffer_delete(big_buf);
+	
+	return true;
 }
 
-function load() { // LOAD
+function load(path = "") { // LOAD
 	
-	var new_path = get_open_filename_ext(_file_ext, "", _last_fpath, _langstr[$ _language].load_caption);
-	if new_path == "" return false;
-	_fpath = new_path;
+	if path == "" {
+		path = get_open_filename_ext(_file_ext, "", _last_fpath, _langstr[$ _language].load_caption);
+		if path == "" return false;
+	}
+	_fpath = path;
 	
 	var plen = string_length(_fpath)
 	var elen = string_length(_file_ext);
 	
 	if string_copy(_fpath, plen-elen+1, elen) == _file_ext {
-		for(var i = plen; i > 0; i--) {
-			if string_char_at(_fpath, i) == "\\" {
-				_fpath = string_copy(_fpath, 1, i-1);
-				break;
-			}
-		}
+		_fpath = string_delete(_fpath, plen-elen+1, elen);
 	}
 	
 	for(var i = plen; i > 0; i--) {
@@ -146,20 +119,28 @@ function load() { // LOAD
 		}
 	}
 	
-	alarm[2] = 2;
-	
-	return true;
+	obj_editor.alarm[2] = 2;
 }
 
-function load_settings(path, filename) {
+function load_from_file() {
 	
-	if !file_exists(path+"\\"+filename+_file_ext) return false;
+	if !file_exists(_fpath+_file_ext) { show_message("NO FILE: "+_fpath+_file_ext); return false; }
 	
-	var f = file_text_open_read(path+"\\"+filename+_file_ext);
-	var s = json_parse(file_text_read_string(f));
-	file_text_close(f);
+	var big_buf = buffer_load(_fpath+_file_ext);
+	var bs = buffer_create(10000, buffer_fixed, 1);
+	var bl = -1;
+	var bc = -1;
+	var ba = -1;	
 	
-	if !is_struct(s) return false;
+	var size = buffer_get_size(bs);
+	var start = 0;
+	
+	buffer_copy(big_buf, start, size, bs, 0);
+	start += size;
+	
+	var s = json_parse(buffer_read(bs, buffer_string));
+	
+	if !is_struct(s) { show_message("FILE SEEMS TO BE DAMAGED"); return false; }
 	
 	_paper_res = s.P_RES;
 	_language = s.LANG;
@@ -204,62 +185,48 @@ function load_settings(path, filename) {
 	_fpath = s.FILE.FPATH;
 	_last_fpath = s.FILE.LFPATH;
 	
-	for(var i = 0; i < ds_list_size(_layers); i++) input_delete("L_NAME_"+string(_layers[| i].l_id));
+	foreach "l" in _layers as_list input_delete("L_NAME_"+string(l.L_ID));
 	ds_list_clear(_layers);
 	
-	foreach "l" in s.LAYERS as_array {
-		ds_list_add(_layers, { s: -1, c: l.C, a: l.A, l_id: l.L_ID, name: string(l.N), hidden: l.H, layer_alpha: l.LA });
-		input_copy("layer name", "L_NAME_"+string(l.L_ID));
-		input_set_text("L_NAME_"+string(l.L_ID), l.N);
-	}
-}
-
-function load_area_select(path) {
-	
-	if file_exists(path+"\\a.s") {
-		var buf = buffer_create(_paper_res.w * _paper_res.h * 4, buffer_fixed, 1);
-		buf = buffer_load(path+"\\a.s");
-		buffer_set_surface(buf, _area_surf, 0);
-		buffer_delete(buf);
-	}
-	if file_exists(path+"\\c.s") {
-		var buf = buffer_create(surface_get_width(_copy_surf) * surface_get_height(_copy_surf) * 4, buffer_fixed, 1);
-		buf = buffer_load(path+"\\c.s");
-		buffer_set_surface(buf, _copy_surf, 0);
-		buffer_delete(buf);
-	}
-}
-
-function load_all_layers(path) {
-	
-	var files = [];
-	var file_name = file_find_first(path+"\\*.l", 0);
-	
-	if file_name == "" return false;
-	
-	while(file_name != "") {
-		array_push(files, file_name);
-		file_name = file_find_next();
-	}
-	file_find_close();
-	
-	var buf = buffer_create(_paper_res.w * _paper_res.h * 4, buffer_fixed, 1);
-	
-	for(var i = 0; i < array_length(files); i++) {
+	foreach "b" in s.BUFS as_array {
 		
-		var layer_data = _layers[| i];
-		layer_data.s = check_surf(layer_data.s, _paper_res.w, _paper_res.h, layer_data.c, layer_data.a);
-		
-		file_name = path+"\\"+string(i)+".l";
+		switch(b.TYPE) {
 			
-		if file_exists(file_name) {
-			buf = buffer_load(file_name);
-			buffer_set_surface(buf, layer_data.s, 0);
+			case "L":
+				ds_list_add(_layers, { s: surface_create(_paper_res.w, _paper_res.h), 
+					c: b.C, a: b.A, l_id: b.L_ID, name: string(b.N), hidden: b.H, layer_alpha: b.LA });
+				input_copy("layer name", "L_NAME_"+string(b.L_ID));
+				input_set_text("L_NAME_"+string(b.L_ID), b.N);
+				
+				if bl == -1 bl = buffer_create(b.SIZE, buffer_fixed, 1);
+				buffer_copy(big_buf, start, b.SIZE, bl, 0);
+				buffer_set_surface(bl, _layers[| ds_list_size(_layers)-1].s, 0);
+				start += b.SIZE;
+				break;
+			
+			case "C":
+				bc = buffer_create(b.SIZE, buffer_fixed, 1);
+				buffer_copy(big_buf, start, b.SIZE, bc, 0);
+				buffer_set_surface(bc, _copy_surf, 0);
+				start += b.SIZE;
+				break;
+			
+			case "A":
+				ba = buffer_create(b.SIZE, buffer_fixed, 1);
+				buffer_copy(big_buf, start, b.SIZE, ba, 0);
+				buffer_set_surface(ba, _area_surf, 0);
+				start += b.SIZE;
+				break;
 		}
 	}
 	
-	buffer_delete(buf);
+	if bs != -1 buffer_delete(bs);
+	if bl != -1 buffer_delete(bl);
+	if bc != -1 buffer_delete(bc);
+	if ba != -1 buffer_delete(ba);
+	buffer_delete(big_buf);
 	
-	load_area_select(path);
+	return true;
 }
-	
+
+function save_layer(i = _current_layer, path = _fpath) {}
