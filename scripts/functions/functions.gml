@@ -81,7 +81,7 @@ function init() {
 		
 	_area_select = { mode: 0, start_pos: [0,0], mn: [0,0], mx: [0,0], copy_surf_size: [1,1], options_init: false };
 	_pasted_selection = { active: false, pos: [0,0], size: [0,0], rot: 0, placed: false, action: 0, mpos: [0,0] };
-		
+	
 	_mask_surf = -1;
 	_draw_surf = -1;
 	_alpha_surf = -1;
@@ -137,6 +137,8 @@ function init() {
 	if string_pos("Runner.exe", parameter_string(0)) == 0 {
 		if parameter_count() > 1 obj_editor.alarm[4] = 10;
 	}
+	
+	undo_save("draw");
 }
 
 function get_mouse_pos() {

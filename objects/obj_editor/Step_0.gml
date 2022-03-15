@@ -30,18 +30,11 @@ camera_set_view_size(view_camera[0], screen.w * _zoom, screen.h * _zoom);
 
 if keyboard_check(vk_control) {
 	
-	if keyboard_check_pressed(ord("S")) {
-		save();
-	}
-	else if keyboard_check_pressed(ord("A")) {
-		clear_area_select();
-	}
-	else if keyboard_check_pressed(ord("C")) {
-		area_copy();
-	}
-	else if keyboard_check_pressed(ord("V")) {
-		area_paste();
-	}
+		 if keyboard_check_pressed(ord("S")) save();
+	else if keyboard_check_pressed(ord("A")) clear_area_select();
+	else if keyboard_check_pressed(ord("C")) area_copy();
+	else if keyboard_check_pressed(ord("V")) area_paste();
+	else if keyboard_check_pressed(ord("Z")) undo();
 }
 
 if mouse_check_button_pressed(mb_left) and !_mouse_over_gui {

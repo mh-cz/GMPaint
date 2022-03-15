@@ -57,24 +57,25 @@ function save_into_file() {
 	
 	foreach "p" in _line.points_list as_list array_push(s.LINE.POINTS, p);
 	
-	var bs =  buffer_create(10000, buffer_fixed, 1); // buffer struct
+	var struct_space = 2048;
+	
+	var bs = buffer_create(struct_space, buffer_fixed, 1); // buffer struct
 	var bl = buffer_create(_paper_res.w * _paper_res.h * 4, buffer_fixed, 1); // buffer layer
 	var bc = buffer_create(surface_get_width(_copy_surf) * surface_get_height(_copy_surf) * 4, buffer_fixed, 1); // buffer copy surf
 	var big_buf = buffer_create(0, buffer_grow, 1); // save buffer
 	
-	var size = buffer_get_size(bs);
-	var space_for_struct = size;
-	
-	size = buffer_get_size(bl);
+	var size = buffer_get_size(bl);
 	
 	foreach "l" in _layers as_list {
 		buffer_get_surface(bl, l.s, 0);
-		buffer_copy(bl, 0, size, big_buf, buffer_get_size(big_buf) + space_for_struct); space_for_struct = 0; // offset just once
+		buffer_copy(bl, 0, size, big_buf, buffer_get_size(big_buf) + struct_space);
+		struct_space = 0; // offset just once
 		array_push(s.BUFS, { SIZE: size, TYPE: "L", C: l.c, A: l.a, L_ID: l.l_id, N: l.name, H: l.hidden, LA: l.layer_alpha });
 	}
 	
 	buffer_get_surface(bl, _area_surf, 0);
-	buffer_copy(bl, 0, size, big_buf, buffer_get_size(big_buf) + space_for_struct); space_for_struct = 0; // just in case no layers
+	buffer_copy(bl, 0, size, big_buf, buffer_get_size(big_buf) + struct_space);
+	struct_space = 0; // just in case no layers
 	array_push(s.BUFS, { SIZE: size, TYPE: "A" });
 	
 	buffer_get_surface(bc, _copy_surf, 0);
@@ -124,10 +125,10 @@ function load(path = "") { // LOAD
 
 function load_from_file() {
 	
-	if !file_exists(_fpath+_file_ext) { show_message("NO FILE: "+_fpath+_file_ext); return false; }
+	if !file_exists(_fpath+_file_ext) { set_bottom_right_text("NO FILE: "+_fpath+_file_ext, 2); return false; }
 	
 	var big_buf = buffer_load(_fpath+_file_ext);
-	var bs = buffer_create(10000, buffer_fixed, 1);
+	var bs = buffer_create(2048, buffer_fixed, 1);
 	var bl = -1;
 	var bc = -1;
 	var ba = -1;	
@@ -140,7 +141,7 @@ function load_from_file() {
 	
 	var s = json_parse(buffer_read(bs, buffer_string));
 	
-	if !is_struct(s) { show_message("FILE SEEMS TO BE DAMAGED"); return false; }
+	if !is_struct(s) { set_bottom_right_text("FILE "+_fpath+_file_ext+" SEEMS TO BE DAMAGED", 2); return false; }
 	
 	_paper_res = s.P_RES;
 	_language = s.LANG;
@@ -185,45 +186,42 @@ function load_from_file() {
 	_fpath = s.FILE.FPATH;
 	_last_fpath = s.FILE.LFPATH;
 	
-	foreach "l" in _layers as_list input_delete("L_NAME_"+string(l.L_ID));
+	foreach "l" in _layers as_list input_delete("L_NAME_"+string(l.l_id));
 	ds_list_clear(_layers);
 	
-	foreach "b" in s.BUFS as_array {
+	foreach "b" in s.BUFS as_array switch(b.TYPE) {
 		
-		switch(b.TYPE) {
-			
-			case "L":
-				ds_list_add(_layers, { s: surface_create(_paper_res.w, _paper_res.h), 
-					c: b.C, a: b.A, l_id: b.L_ID, name: string(b.N), hidden: b.H, layer_alpha: b.LA });
-				input_copy("layer name", "L_NAME_"+string(b.L_ID));
-				input_set_text("L_NAME_"+string(b.L_ID), b.N);
+		case "L":
+			ds_list_add(_layers, { s: surface_create(_paper_res.w, _paper_res.h), 
+				c: b.C, a: b.A, l_id: b.L_ID, name: string(b.N), hidden: b.H, layer_alpha: b.LA });
+			input_copy("layer name", "L_NAME_"+string(b.L_ID));
+			input_set_text("L_NAME_"+string(b.L_ID), b.N);
 				
-				if bl == -1 bl = buffer_create(b.SIZE, buffer_fixed, 1);
-				buffer_copy(big_buf, start, b.SIZE, bl, 0);
-				buffer_set_surface(bl, _layers[| ds_list_size(_layers)-1].s, 0);
-				start += b.SIZE;
-				break;
+			if bl == -1 bl = buffer_create(b.SIZE, buffer_fixed, 1);
+			buffer_copy(big_buf, start, b.SIZE, bl, 0);
+			buffer_set_surface(bl, _layers[| ds_list_size(_layers)-1].s, 0);
+			start += b.SIZE;
+			break;
 			
-			case "C":
-				bc = buffer_create(b.SIZE, buffer_fixed, 1);
-				buffer_copy(big_buf, start, b.SIZE, bc, 0);
-				buffer_set_surface(bc, _copy_surf, 0);
-				start += b.SIZE;
-				break;
+		case "C":
+			bc = buffer_create(b.SIZE, buffer_fixed, 1);
+			buffer_copy(big_buf, start, b.SIZE, bc, 0);
+			buffer_set_surface(bc, _copy_surf, 0);
+			start += b.SIZE;
+			break;
 			
-			case "A":
-				ba = buffer_create(b.SIZE, buffer_fixed, 1);
-				buffer_copy(big_buf, start, b.SIZE, ba, 0);
-				buffer_set_surface(ba, _area_surf, 0);
-				start += b.SIZE;
-				break;
-		}
+		case "A":
+			ba = buffer_create(b.SIZE, buffer_fixed, 1);
+			buffer_copy(big_buf, start, b.SIZE, ba, 0);
+			buffer_set_surface(ba, _area_surf, 0);
+			start += b.SIZE;
+			break;
 	}
 	
-	if bs != -1 buffer_delete(bs);
 	if bl != -1 buffer_delete(bl);
 	if bc != -1 buffer_delete(bc);
 	if ba != -1 buffer_delete(ba);
+	buffer_delete(bs);
 	buffer_delete(big_buf);
 	
 	return true;

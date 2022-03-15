@@ -12,6 +12,8 @@ function tool_eraser() {
 	
 	if !_mouse_over_gui {
 		
+		if mouse_check_button_pressed(mb_left) undo_save("draw");
+		
 		if mouse_check_button_pressed(mb_left) and !_brush.moved {
 			
 			gpu_set_blendmode(bm_subtract);

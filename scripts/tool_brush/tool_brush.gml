@@ -63,6 +63,8 @@ function tool_brush() {
 	// APPLY
 	if mouse_check_button_released(mb_left) {
 		
+		undo_save("draw");
+		
 		gpu_set_blendmode_ext(bm_one, bm_inv_src_alpha);
 		surface_set_target(_layers[| _current_layer].s);
 		shader_set(shd_premultiply_alpha);

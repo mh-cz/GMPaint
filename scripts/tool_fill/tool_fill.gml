@@ -6,6 +6,8 @@ function tool_fill() {
 	if device_mouse_check_button_pressed(0, mb_left) and _fill.phase == 0 and !_mouse_over_gui {
 		if _mouse.x > 0 and _mouse.y > 0 and _mouse.x < _paper_res.w and _mouse.y < _paper_res.h {
 			
+			undo_save("draw");
+			
 			surface_set_target(_mask_surf);
 			draw_clear_alpha(c_black, 0);
 			draw_sprite(spr_1px, 0, _mouse.x, _mouse.y)
