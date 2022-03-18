@@ -29,7 +29,6 @@ camera_set_view_size(view_camera[0], screen.w * _zoom, screen.h * _zoom);
 #endregion
 
 if keyboard_check(vk_control) {
-	
 		 if keyboard_check_pressed(ord("S")) save();
 	else if keyboard_check_pressed(ord("A")) clear_area_select();
 	else if keyboard_check_pressed(ord("C")) area_copy();

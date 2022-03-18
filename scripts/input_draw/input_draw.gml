@@ -278,7 +278,7 @@ function input_draw(input_id, x, y, mx, my) {
 				);
 		}
 		
-		if keyboard_check_pressed(vk_enter) {
+		if keyboard_check_released(vk_enter) {
 			s.has_focus = false;
 			_selected_input = "";
 		}

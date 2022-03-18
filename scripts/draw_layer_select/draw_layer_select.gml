@@ -22,11 +22,14 @@ function draw_layer_select(x, y) {
 	
 	var can_scroll = row_h * ds_list_size(_layers) > wh;
 	
-	if point_in_rectangle(device_mouse_x_to_gui(0), device_mouse_y_to_gui(0), x, y, x+ww, y+wh) {
+	var mx = device_mouse_x_to_gui(0);
+	var my = device_mouse_y_to_gui(0);
+	
+	if point_in_rectangle(mx, my, x, y, x+ww, y+wh) {
 		_mouse_over_gui = true;
 		if can_scroll _layer_select.ypos += (mouse_wheel_down() - mouse_wheel_up()) * row_h/2;
 	}
-	else if point_in_rectangle(device_mouse_x_to_gui(0), device_mouse_y_to_gui(0), x, y+wh, x+ww, y+wh+32) {
+	else if point_in_rectangle(mx, my, x, y+wh, x+ww, y+wh+32) {
 		_mouse_over_gui = true;
 	}
 	
@@ -38,8 +41,8 @@ function draw_layer_select(x, y) {
 		var xx = 5;
 		var yy = 5 + _layer_select.ypos_smooth + row_h * (ds_list_size(_layers)-1 - i);
 		
-		if point_in_rectangle(device_mouse_x_to_gui(0), device_mouse_y_to_gui(0), x+xx, y+yy-4, x+xx+base+4, y+yy+base+5) 
-		and point_in_rectangle(device_mouse_x_to_gui(0), device_mouse_y_to_gui(0), x, y, x+ww, y+wh)
+		if point_in_rectangle(mx, my, x+xx, y+yy-4, x+xx+base+4, y+yy+base+5) 
+		and point_in_rectangle(mx, my, x, y, x+ww, y+wh)
 		and !_mouse_started_on_paper {
 			
 			draw_set_color(make_color_rgb(0, 150, 0));
@@ -60,7 +63,7 @@ function draw_layer_select(x, y) {
 		if (mouse_check_button(mb_left) and _current_layer == i) or _current_tool == _tool.line
 			draw_surface_stretched(_alpha_surf, xx+bmw, yy+bmh, imgw, imgh);
 		
-		if point_in_rectangle(device_mouse_x_to_gui(0), device_mouse_y_to_gui(0), x+xx+base+10, y+yy+34, x+xx+base+10+20, y+yy+34+20) {
+		if point_in_rectangle(mx, my, x+xx+base+10, y+yy+34, x+xx+base+10+20, y+yy+34+20) {
 			
 			draw_set_color(c_gray);
 			draw_rectangle(xx+base+10+1, yy+34+1, xx+base+10+20-2, yy+34+20-2, false);
@@ -99,7 +102,7 @@ function draw_layer_select(x, y) {
 	surface_reset_target();
 	draw_surface(_layer_select.surf, x, y);
 	
-	if !_mouse_started_on_paper and point_in_rectangle(device_mouse_x_to_gui(0), device_mouse_y_to_gui(0), x, y+wh, x+32, y+wh+32) {
+	if !_mouse_started_on_paper and point_in_rectangle(mx, my, x, y+wh, x+32-1, y+wh+32) {
 		draw_set_color(make_color_rgb(25, 200, 25));
 		draw_rectangle(x, y+wh, x+32, y+wh+32, false);
 		if mouse_check_button_pressed(mb_left) layer_add(c_black, 0);
@@ -109,7 +112,7 @@ function draw_layer_select(x, y) {
 		draw_rectangle(x, y+wh, x+32, y+wh+32, false);
 	}
 	
-	if !_mouse_started_on_paper and point_in_rectangle(device_mouse_x_to_gui(0), device_mouse_y_to_gui(0), x+32, y+wh, x+32*2, y+wh+32) {
+	if !_mouse_started_on_paper and point_in_rectangle(mx, my, x+32, y+wh, x+32*2-1, y+wh+32) {
 		draw_set_color(make_color_rgb(150, 25, 25));
 		draw_rectangle(x+32, y+wh, x+32*2, y+wh+32, false);
 		if mouse_check_button_pressed(mb_left) and _current_layer > -1 layer_delete(_current_layer--);
@@ -119,7 +122,7 @@ function draw_layer_select(x, y) {
 		draw_rectangle(x+32, y+wh, x+32*2, y+wh+32, false);
 	}
 	
-	if !_mouse_started_on_paper and point_in_rectangle(device_mouse_x_to_gui(0), device_mouse_y_to_gui(0), x+32*2, y+wh, x+32*3, y+wh+32) {
+	if !_mouse_started_on_paper and point_in_rectangle(mx, my, x+32*2, y+wh, x+32*3-1, y+wh+32) {
 		draw_set_color(make_color_rgb(100, 100, 200));
 		draw_rectangle(x+32*2, y+wh, x+32*3, y+wh+32, false);
 		if mouse_check_button_pressed(mb_left) and _current_layer > 0 layer_join_below(_current_layer--);
@@ -129,7 +132,7 @@ function draw_layer_select(x, y) {
 		draw_rectangle(x+32*2, y+wh, x+32*3, y+wh+32, false);
 	}
 	
-	if !_mouse_started_on_paper and point_in_rectangle(device_mouse_x_to_gui(0), device_mouse_y_to_gui(0), x+32*3, y+wh, x+32*4, y+wh+32) {
+	if !_mouse_started_on_paper and point_in_rectangle(mx, my, x+32*3, y+wh, x+32*4-1, y+wh+32) {
 		draw_set_color(make_color_rgb(100, 100, 200));
 		draw_rectangle(x+32*3, y+wh, x+32*4, y+wh+32, false);
 		if mouse_check_button_pressed(mb_left) and ds_list_size(_layers) > 1 {
@@ -142,8 +145,30 @@ function draw_layer_select(x, y) {
 		draw_rectangle(x+32*3, y+wh, x+32*4, y+wh+32, false);
 	}
 	
+	if !_mouse_started_on_paper and point_in_rectangle(mx, my, x+32*4, y+wh, x+32*5+4-1, y+wh+32) {
+		draw_set_color(make_color_rgb(125, 125, 50));
+		draw_rectangle(x+32*4, y+wh, x+32*5+4, y+wh+32, false);
+		if mouse_check_button_pressed(mb_left) and ds_list_size(_layers) > 1 move_layer_up();
+	}
+	else {
+		draw_set_color(make_color_rgb(50, 50, 25));
+		draw_rectangle(x+32*4, y+wh, x+32*5+4, y+wh+32, false);
+	}
+	
+	if !_mouse_started_on_paper and point_in_rectangle(mx, my, x+32*5+4, y+wh, x+32*6+8-1, y+wh+32) {
+		draw_set_color(make_color_rgb(125, 125, 50));
+		draw_rectangle(x+32*5+4, y+wh, x+32*6+7, y+wh+32, false);
+		if mouse_check_button_pressed(mb_left) and ds_list_size(_layers) > 1 move_layer_down();
+	}
+	else {
+		draw_set_color(make_color_rgb(50, 50, 25));
+		draw_rectangle(x+32*5+4, y+wh, x+32*6+7, y+wh+32, false);
+	}
+	
 	draw_sprite(spr_layer_icons, 0, x, y+wh);
 	draw_sprite(spr_layer_icons, 1, x+32, y+wh);
 	draw_sprite(spr_layer_icons, 2, x+32*2, y+wh);
 	draw_sprite(spr_layer_icons, 3, x+32*3, y+wh);
+	draw_sprite(spr_layer_icons, 4, x+32*4+2, y+wh);
+	draw_sprite(spr_layer_icons, 5, x+32*5+6, y+wh);
 }

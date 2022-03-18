@@ -113,11 +113,15 @@ function pasted_selection() {
 				ps.mpos = [_mouse.x, _mouse.y];
 				ps.action = 3.8;
 			}
-			else if point_in_rectangle(_mouse.x, _mouse.y, ps.pos[0], ps.pos[1], ps.pos[0]+ps.size[0], ps.pos[1]+ps.size[1]) {
+			else if point_in_rectangle(_mouse.x, _mouse.y, 
+			min(ps.pos[0], ps.pos[0]+ps.size[0]), min(ps.pos[1], ps.pos[1]+ps.size[1]),
+			max(ps.pos[0], ps.pos[0]+ps.size[0]), max(ps.pos[1], ps.pos[1]+ps.size[1])) {
 				ps.mpos = [_mouse.x, _mouse.y];
 				ps.action = 1;
 			}
-			else if corner2center_dist > point_distance(ps.pos[0]+ps.size[0]/2, ps.pos[1]+ps.size[1]/2, _mouse.x, _mouse.y) {
+			else if point_in_rectangle(_mouse.x, _mouse.y, 
+			min(ps.pos[0], ps.pos[0]+ps.size[0])-32, min(ps.pos[1], ps.pos[1]+ps.size[1])-32,
+			max(ps.pos[0], ps.pos[0]+ps.size[0])+32, max(ps.pos[1], ps.pos[1]+ps.size[1])+32) {
 				ps.mpos = [point_direction(ps.pos[0]+ps.size[0]/2, ps.pos[1]+ps.size[1]/2, _mouse.x, _mouse.y), 0];
 				ps.action = 2;
 			}
@@ -189,6 +193,8 @@ function pasted_selection() {
 	
 	if keyboard_check_pressed(vk_enter) {
 		
+		undo_save("draw");
+		
 		gpu_set_blendmode_ext(bm_one, bm_inv_src_alpha);
 		surface_set_target(_layers[| _current_layer].s);
 		draw_surface(_draw_surf, 0, 0);
@@ -197,11 +203,11 @@ function pasted_selection() {
 		clear_surf([_mask_surf, _draw_surf, _alpha_surf, _area_surf]);
 		gpu_set_blendmode(bm_normal);
 		
-		save_layer();
+		quicksave();
 		_pasted_selection.active = false;
 		clear_area_select();
 		
-		return 0;
+		return false;
 	}
 	
 	if ps.placed and !mouse_check_button(mb_left) {
@@ -239,5 +245,4 @@ function pasted_selection() {
 		draw_circle_ext(ps.pos[0], ps.pos[1]+ps.size[1], (2.5 + h[6]) * zm, zm, 4);
 		draw_circle_ext(ps.pos[0], ps.pos[1]+ps.size[1]/2, (2.5 + h[7]) * zm, zm, 4);
 	}
-	
 }

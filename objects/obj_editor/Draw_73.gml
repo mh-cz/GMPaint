@@ -1,12 +1,12 @@
 var off = (_brush.size % 2 == 1) ? 0.5 : 1;
 
-draw_set_color(c_black);
+draw_set_color(c_gray);
 draw_rectangle(0, 0, _paper_res.w - 1, _paper_res.h - 1, true);
 
 switch(_current_tool) {
 	
 	case _tool.fill:
-	
+		
 		draw_set_color(rgba2c(_brush.col, 255));
 		draw_rectangle(_mouse.x, _mouse.y, _mouse.x, _mouse.y, false);
 		break;

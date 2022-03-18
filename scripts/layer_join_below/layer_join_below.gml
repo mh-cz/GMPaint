@@ -46,3 +46,21 @@ function layer_join_all() {
 		layer_delete(l);
 	}
 }
+
+function move_layer_up() {
+	if _current_layer < ds_list_size(_layers)-1 {
+		var this = _layers[| _current_layer+1];
+		_layers[| _current_layer+1] = _layers[| _current_layer];
+		_layers[| _current_layer] = this;
+		_current_layer++;
+	}
+}
+
+function move_layer_down() {
+	if _current_layer > 0 {
+		var this = _layers[| _current_layer-1];
+		_layers[| _current_layer-1] = _layers[| _current_layer];
+		_layers[| _current_layer] = this;
+		_current_layer--;
+	}
+}

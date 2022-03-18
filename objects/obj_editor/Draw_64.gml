@@ -22,6 +22,7 @@ draw_color_picker();
 draw_layer_select(screen.w - _layer_select.w - 15, screen.h - _layer_select.h - 15-32 - _bottom_bar.h);
 draw_bottom_bar();
 draw_upper_bar();
+paper_resolution();
 
 _mouse_over_menu = false;
 draw_upper_menu();

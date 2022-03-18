@@ -7,18 +7,18 @@ function line_curve(points_list, tension, closed) {
 	
 	if !closed {
 		for(var i = 0; i < points_len + 1; i++) {
-			if i == 0 ps[array_length(ps)] = points_list[| i];
-			if i < points_len ps[array_length(ps)] = points_list[| i];
-			else ps[array_length(ps)] = points_list[| points_len-1];
+			if i == 0 array_push(ps, points_list[| i]);
+			if i < points_len array_push(ps, points_list[| i]);
+			else array_push(ps, points_list[| points_len-1]);
 		}
 	}
 	else {
 		for(var i = 0; i < points_len + 1; i++) {
-			if i == 0 ps[array_length(ps)] = points_list[| points_len-1];
-			if i < points_len ps[array_length(ps)] = points_list[| i];
+			if i == 0 array_push(ps, points_list[| points_len-1]);
+			if i < points_len array_push(ps, points_list[| i]);
 			else {
-				ps[array_length(ps)] = points_list[| 0];
-				ps[array_length(ps)] = points_list[| 1];
+				array_push(ps, points_list[| 0]);
+				array_push(ps, points_list[| 1]);
 			}
 		}
 	}
@@ -55,8 +55,8 @@ function line_curve(points_list, tension, closed) {
 			var pds = point_distance(prevx, prevy, px, py);
 			for(var k = 0; k < pds; k += _brush.step) {
 				draw_surface(_brush.brush_surf,
-					prevx - _brush.size/2 + lengthdir_x(k, pdr),
-					prevy - _brush.size/2 + lengthdir_y(k, pdr));
+					prevx - (_brush.size div 2) + lengthdir_x(k, pdr),
+					prevy - (_brush.size div 2) + lengthdir_y(k, pdr));
 			}
 			
 			prevx = px;
@@ -163,7 +163,7 @@ function tool_line() {
 		_line.grabbed = -1;
 		gpu_set_blendmode(bm_normal);
 		
-		save_layer();
+		quicksave();
 	}
 	
 	var zm = _zoom * 1.5;

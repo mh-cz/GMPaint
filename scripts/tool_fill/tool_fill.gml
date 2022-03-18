@@ -111,10 +111,10 @@ function tool_fill() {
 		
 		clear_surf([_mask_surf, _draw_surf, _alpha_surf]);
 		free_surf([_fill.surf, _fill.copy_surf, _fill.comp_surf, _fill.find_col_surf, _fill.one_px_surf]);
-		save_layer(_current_layer);
+		quicksave(_current_layer);
 		
 		gpu_set_blendmode(bm_normal);
 		
-		save_layer();
+		quicksave();
 	}
 }

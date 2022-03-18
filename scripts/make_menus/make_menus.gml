@@ -4,10 +4,12 @@ function make_menus() {
 	
 	var buttons = ds_list_create();
 	
-	ds_list_add(buttons, { text: _langstr[$ _language].menu_new_file, on_click: function() {}});
+	ds_list_add(buttons, { text: _langstr[$ _language].menu_new_file, on_click: function() { game_restart(); }});
 	ds_list_add(buttons, { text: _langstr[$ _language].menu_open_file, on_click: function() { load(); }});
-	ds_list_add(buttons, { text: _langstr[$ _language].menu_import_image, on_click: function() {}});
-	ds_list_add(buttons, { text: _langstr[$ _language].menu_export_image, on_click: function() {}});
+	ds_list_add(buttons, { text: _langstr[$ _language].menu_import_image, on_click: function() { import(); }});
+	ds_list_add(buttons, { text: _langstr[$ _language].menu_export_image, on_click: function() { export(); }});
+	ds_list_add(buttons, { text: _langstr[$ _language].menu_export_layer, on_click: function() { export_layer(); }});
+	ds_list_add(buttons, { text: _langstr[$ _language].menu_export_gif, on_click: function() { export_gif(); }});
 	ds_list_add(buttons, { text: _langstr[$ _language].menu_save, on_click: function() { save(); }});
 	ds_list_add(buttons, { text: _langstr[$ _language].menu_save_as, on_click: function() { save(true); }});
 	

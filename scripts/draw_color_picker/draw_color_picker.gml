@@ -179,16 +179,14 @@ function draw_color_picker() {
 		}
 		else {
 			if t != "" and t == string_digits(t) {
-				t = round(clamp(real(t), 0, 255));
-				input_set_text(_selected_input, t);
 				switch(_selected_input) {
-					case "cp_R": _color_wheel.r = t / 255; break;
-					case "cp_G": _color_wheel.g = t / 255; break;
-					case "cp_B": _color_wheel.b = t / 255; break;
-					case "cp_A": _color_wheel.a = t / 255; break;
-					case "cp_H": _color_wheel.h = t / 255; break;
-					case "cp_S": _color_wheel.s = t / 255; break;
-					case "cp_V": _color_wheel.v = t / 255; break;
+					case "cp_R": _color_wheel.r = round(clamp(real(t), 0, 255)) / 255; input_set_text(_selected_input, _color_wheel.r * 255); break;
+					case "cp_G": _color_wheel.g = round(clamp(real(t), 0, 255)) / 255; input_set_text(_selected_input, _color_wheel.g * 255); break;
+					case "cp_B": _color_wheel.b = round(clamp(real(t), 0, 255)) / 255; input_set_text(_selected_input, _color_wheel.b * 255); break;
+					case "cp_A": _color_wheel.a = round(clamp(real(t), 0, 255)) / 255; input_set_text(_selected_input, _color_wheel.a * 255); break;
+					case "cp_H": _color_wheel.h = round(clamp(real(t), 0, 255)) / 255; input_set_text(_selected_input, _color_wheel.h * 255); break;
+					case "cp_S": _color_wheel.s = round(clamp(real(t), 0, 255)) / 255; input_set_text(_selected_input, _color_wheel.s * 255); break;
+					case "cp_V": _color_wheel.v = round(clamp(real(t), 0, 255)) / 255; input_set_text(_selected_input, _color_wheel.v * 255); break;
 				}
 			}
 		}

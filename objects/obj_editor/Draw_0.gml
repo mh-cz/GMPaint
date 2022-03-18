@@ -1,8 +1,5 @@
 gpu_set_texfilter(false);
 
-draw_set_color(c_dkgray);
-draw_rectangle(0, 0, _paper_res.w - 1, _paper_res.h - 1, true);
-
 if _current_layer > -1 {
 
 	gpu_set_blendmode_ext(bm_one, bm_inv_src_alpha);

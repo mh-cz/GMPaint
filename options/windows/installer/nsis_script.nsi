@@ -87,10 +87,10 @@
 ;..................................................................................................
 ;include the Uninstall log header
 !include AdvUninstLog.nsh
+
 ;..................................................................................................
 
-
-
+;!include FileAssociation.nsh
 
 ;--------------------------------
 
@@ -182,7 +182,6 @@ Section `${APP_NAME}`
   WriteRegDWORD ${INSTDIR_REG_ROOT} "${INSTDIR_REG_KEY}"  "NoModify" 1
   WriteRegDWORD ${INSTDIR_REG_ROOT} "${INSTDIR_REG_KEY}"  "NoRepair" 1
 
-
 SectionEnd
 
 Section "Visual C++ Redistributable" SEC_VCREDIST
@@ -206,17 +205,16 @@ Section "Start Menu Shortcuts"
     ;create shortcut for uninstaller always use ${UNINST_EXE} instead of uninstall.exe
     CreateShortcut "$SMPROGRAMS\${APP_NAME}\uninstall.lnk" "${UNINST_EXE}"
     CreateShortCut "$SMPROGRAMS\${APP_NAME}\${APP_NAME} License.lnk" "notepad.exe" "$INSTDIR\License.txt"
-  
+
 SectionEnd
 
 
 ; Optional section (can be enabled by the user)
-Section /o "Desktop shortcut"
+Section "Desktop shortcut"
 
   CreateShortCut "$DESKTOP\${APP_NAME}.lnk" "$INSTDIR\${EXE_NAME}.exe" ""
   
 SectionEnd
-
 
 Function .onInit
 
@@ -232,6 +230,8 @@ Function .onInstSuccess
          !insertmacro UNINSTALL.LOG_UPDATE_INSTALL
 
 FunctionEnd
+
+
 
 #######################################################################################
 

@@ -35,7 +35,7 @@ function tool_brush() {
 		if mouse_check_button_pressed(mb_left) and !_brush.moved {
 		
 			surface_set_target(_mask_surf);
-			draw_surface(_brush.brush_surf, _brush.pwmx - _brush.size/2, _brush.pwmy - _brush.size/2);
+			draw_surface(_brush.brush_surf, _brush.pwmx - (_brush.size div 2), _brush.pwmy - (_brush.size div 2));
 			surface_reset_target();
 		
 			combine_surfs();
@@ -46,11 +46,11 @@ function tool_brush() {
 			for(var i = 0; i < _brush.pds_wm; i += _brush.step) {
 				if i > _brush.pds_wm-_brush.step/2 continue;
 				draw_surface(_brush.brush_surf,
-					_brush.pwmx - _brush.size/2 + lengthdir_x(i, _brush.pdr_wm),
-					_brush.pwmy - _brush.size/2 + lengthdir_y(i, _brush.pdr_wm));
+					_brush.pwmx - (_brush.size div 2) + lengthdir_x(i, _brush.pdr_wm),
+					_brush.pwmy - (_brush.size div 2) + lengthdir_y(i, _brush.pdr_wm));
 			}
 			surface_reset_target();
-		
+			
 			combine_surfs();
 		}
 	}
@@ -75,6 +75,6 @@ function tool_brush() {
 		clear_surf([_mask_surf, _draw_surf, _alpha_surf]);
 		gpu_set_blendmode(bm_normal);
 		
-		save_layer();
+		quicksave();
 	}
 }

@@ -1,1 +1,1 @@
-load_from_file();
+quickload("quick");

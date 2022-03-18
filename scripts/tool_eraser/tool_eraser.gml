@@ -39,7 +39,7 @@ function tool_eraser() {
 	gpu_set_blendmode(bm_normal);
 	
 	if mouse_check_button_released(mb_left) {
-		save_layer();
+		quicksave();
 	}
 	
 	

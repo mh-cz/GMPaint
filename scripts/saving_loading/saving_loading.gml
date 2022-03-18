@@ -8,10 +8,16 @@ function save(as = false) { // SAVE
 	
 	if _filename == "" {
 		var new_path = get_save_filename_ext(_file_ext, _langstr[$ _language].new_file+_file_ext, _last_fpath, _langstr[$ _language].save_caption);
-		if new_path == "" return false;
+		if new_path == "" {
+			if as {
+				_fpath = obj_editor.old[0];
+				_filename = obj_editor.old[1];
+			}
+			return false;
+		}
 		_fpath = new_path;
 		
-		var plen = string_length(_fpath)
+		var plen = string_length(_fpath);
 		var elen = string_length(_file_ext);
 
 		if string_copy(_fpath, plen-elen+1, elen) == _file_ext {
@@ -33,7 +39,7 @@ function save(as = false) { // SAVE
 	obj_editor.alarm[as ? 3 : 1] = 2;
 }
 
-function save_into_file() {
+function save_into_file(path = _fpath) {
 	
 	var s = {
 		P_RES: _paper_res,
@@ -86,7 +92,7 @@ function save_into_file() {
 	buffer_write(bs, buffer_string, json_stringify(s));
 	buffer_copy(bs, 0, buffer_get_size(bs), big_buf, 0);
 	
-	buffer_save(big_buf, _fpath+_file_ext);
+	buffer_save(big_buf, path+_file_ext);
 	
 	buffer_delete(bs);
 	buffer_delete(bl);
@@ -123,11 +129,13 @@ function load(path = "") { // LOAD
 	obj_editor.alarm[2] = 2;
 }
 
-function load_from_file() {
+function load_from_file(path = _fpath) {
 	
-	if !file_exists(_fpath+_file_ext) { set_bottom_right_text("NO FILE: "+_fpath+_file_ext, 2); return false; }
+	var f = path + _file_ext;
 	
-	var big_buf = buffer_load(_fpath+_file_ext);
+	if !file_exists(f) { set_bottom_right_text("NO FILE: \""+f+"\"", 2); return false; }
+	
+	var big_buf = buffer_load(f);
 	var bs = buffer_create(2048, buffer_fixed, 1);
 	var bl = -1;
 	var bc = -1;
@@ -141,7 +149,7 @@ function load_from_file() {
 	
 	var s = json_parse(buffer_read(bs, buffer_string));
 	
-	if !is_struct(s) { set_bottom_right_text("FILE "+_fpath+_file_ext+" SEEMS TO BE DAMAGED", 2); return false; }
+	if !is_struct(s) { set_bottom_right_text("FILE \""+f+"\" IS DAMAGED", 2); return false; }
 	
 	_paper_res = s.P_RES;
 	_language = s.LANG;
@@ -227,4 +235,11 @@ function load_from_file() {
 	return true;
 }
 
-function save_layer(i = _current_layer, path = _fpath) {}
+// FOR UNDO (and possible crashes)
+function quicksave() {
+	save_into_file("quick");
+}
+
+function quickload() {
+	load_from_file("quick");
+}
