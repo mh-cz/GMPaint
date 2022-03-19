@@ -11,7 +11,7 @@ else cam_prev_mouse_pos = 0;
 
 var wheel = mouse_wheel_down() - mouse_wheel_up();
 
-if wheel != 0 and !_mouse_over_gui {
+if wheel != 0 and (!_mouse_over_gui or _paper_res_drag.action != 0) {
 	
 	_zoom += _zoom * wheel * 0.2;
 	

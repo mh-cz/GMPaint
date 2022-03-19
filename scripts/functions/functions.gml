@@ -41,13 +41,13 @@ function init() {
 	globalvar _fpath;
 	globalvar _last_fpath;
 	
-	globalvar _undo_counter;	
-	globalvar _redo_counter;
+	globalvar _undo_counter;
 	globalvar _undo_list;
+	globalvar _paper_res_drag;
 	
 	enum _tool { none = -1, brush = 0, line = 1, fill = 2, eraser = 3, pipette = 4, area_select = 5 };
 	
-	_language = "cz";
+	_language = "en";
 	
 	_paper_res = { w: 1280, h: 720 };
 	
@@ -63,22 +63,22 @@ function init() {
 	_layers = ds_list_create();
 	_layer_id_counter = 0;
 	_current_layer = -1;
-		
-	layer_add(c_grey, 1);
+	
+	layer_add(c_white, 1);
 	
 	_layer_select = { surf: -1, w: 200, h: 400, ypos: 0, ypos_smooth: 0 };
 	
-	_brush = { size: 20, brush_surf: -1, size_surf: -1, col: [1, 1, 1, 1], falloff: 1.2, tex: -1, tex_mask: -1,
+	_brush = { size: 20, brush_surf: -1, size_surf: -1, col: [0, 0, 0, 1], falloff: 1.2, tex: -1, tex_mask: -1,
 			   step: 0, step_scale: .15, weight: 1, wmx: 0, wmy: 0, pwmx: 0, pwmy: 0, 
 			   pds_wm: 0, pdr_wm: 0, moved: false, options_init: false };
-		
+	
 	_line = { points_list: ds_list_create(), grabbed: -1, tension: 0, closed: false, options_init: false };
 	
 	_fill = { surf: -1, comp_surf: -1, copy_surf: -1, find_col_surf: -1, one_px_surf: -1,
 			  tol: 10, phase: 0, start_col: [0,0,0,0], start_pos: [0,0], buf: -1, options_init: false };
-		
+	
 	_pipette = { buf_list: ds_list_create() };
-		
+	
 	_area_select = { mode: 0, start_pos: [0,0], mn: [0,0], mx: [0,0], copy_surf_size: [1,1], options_init: false };
 	_pasted_selection = { active: false, pos: [0,0], size: [0,0], rot: 0, placed: false, action: 0, mpos: [0,0] };
 	
@@ -89,12 +89,14 @@ function init() {
 	_img_ovr_surf = -1;
 	_area_surf = -1;
 	_copy_surf = -1;
-		
-	_color_wheel = { surf: -1, size_surf: -1, h: 0, s: 0, v: 1, r: 1, g: 1, b: 1, a: 1, hex: "#FFFFFF",
-					 pos: [-1, -1], msi: false, prev_rgba: [1, 1, 1, 1], wy: -0.5 };
+	
+	_color_wheel = { surf: -1, size_surf: -1, h: 0, s: 0, v: 0, r: 0, g: 0, b: 0, a: 1, hex: "#000000",
+					 pos: [-1, -1], msi: false, prev_rgba: [0, 0, 0, 1], wy: -0.5 };
 	
 	_bottom_bar = { h: 20, rt_time: -1, right_text: "", lt_time: -1, left_text: "", };
 	_upper_bar = { h: 24 };
+	
+	_paper_res_drag = { action: 0, mpos: [0,0], size: [_paper_res.w, _paper_res.h], options_init: false };
 	
 	create_camera();
 	cam_x = _paper_res.w/2;
@@ -104,7 +106,7 @@ function init() {
 		
 	_mouse = { x: 0, y: 0, xfloat: 0, yfloat: 0 };
 	last_click_pos = [0,0];
-		
+	
 	draw_set_circle_precision(32);
 	
 	_mouse_over_gui = false;
@@ -119,7 +121,7 @@ function init() {
 	_file_ext = ".gmp";
 	_fpath = working_directory+"temp";
 	_last_fpath = "";
-		
+	
 	obj_editor.can_reset_cursor = false;
 		
 	_menu_list = ds_list_create();

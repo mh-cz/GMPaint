@@ -17,6 +17,16 @@ function make_menus() {
 	foreach "btn" in buttons as_list maxlen = max(string_width(btn.text)+16, maxlen);
 	
 	ds_list_add(_menu_list, { text: _langstr[$ _language].menu_file, w: string_width(_langstr[$ _language].menu_file)+10, b: buttons, bw: maxlen });
+	
+	var buttons2 = ds_list_create();
+	
+	ds_list_add(buttons2, { text: "CZ", on_click: function() { _language = "cz"; obj_editor.alarm[5] = 2; }});
+	ds_list_add(buttons2, { text: "EN", on_click: function() { _language = "en"; obj_editor.alarm[5] = 2; }});
+	
+	var maxlen = 0;
+	foreach "btn" in buttons2 as_list maxlen = max(string_width(btn.text)+16, maxlen);
+	
+	ds_list_add(_menu_list, { text: _langstr[$ _language].menu_lang, w: string_width(_langstr[$ _language].menu_lang)+8, b: buttons2, bw: maxlen });
 }
 
 function draw_upper_menu() {
@@ -39,7 +49,7 @@ function draw_upper_menu() {
 		draw_text(xx + text_offx, h/2, menu.text);
 		
 		if point_in_rectangle(device_mouse_x_to_gui(0), device_mouse_y_to_gui(0), xx, 0, xx+menu.w, h) {
-			_sel_menu_opt = menu.text
+			_sel_menu_opt = menu.text;
 			_mouse_over_menu = true;
 		}
 		
@@ -64,9 +74,9 @@ function draw_upper_menu() {
 				draw_set_color(c_white);
 				draw_text(xx + text_offx, yy + (i+1) * h + h/2, btn.text);
 			}
-		
-			xx += menu.w + 10;
 		}
+		
+		xx += menu.w;
 	}
 	
 	draw_set_valign(0);

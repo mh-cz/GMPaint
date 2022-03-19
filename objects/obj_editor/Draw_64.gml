@@ -8,6 +8,7 @@ if mouse_check_button_released(mb_left) {
 _mouse_over_gui = false;
 
 draw_toolbar(35, 35+_bottom_bar.h, 2);
+if _paper_res_drag.action != 0 _mouse_over_gui = true;
 
 switch(_current_tool) {
 	case _tool.brush: options_brush(); break;
@@ -26,3 +27,4 @@ paper_resolution();
 
 _mouse_over_menu = false;
 draw_upper_menu();
+if _paper_res_drag.action != 0 _mouse_over_menu = true;
