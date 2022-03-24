@@ -1,6 +1,6 @@
 function import() {
 	
-	var path = get_open_filename_ext("*.png *.jpg *.jpeg", "", _last_fpath, "Import");
+	var path = get_open_filename_ext("*.jpg; *.jpeg, *.png", "", _last_fpath, "Import");
 	if path == "" return false;
 	
 	var img = sprite_add(path, 1, false, false, 0, 0);
@@ -26,11 +26,13 @@ function import() {
 	_pasted_selection.size = [_area_select.copy_surf_size[0], _area_select.copy_surf_size[1]];
 	_pasted_selection.rot = 0;
 	_pasted_selection.active = true;
+	
+	set_bottom_right_text("Imported: \""+path+"\"", 2);
 }
 
 function export() {
 	
-	var path = get_save_filename_ext("*.png", (_filename == "" ? "untitled" : _filename) + ".png", _last_fpath, "Export PNG");
+	var path = get_save_filename_ext("*.png", (_filename == "" ? "untitled" : _filename) + ".png", _last_fpath, "Export");
 	if path == "" return false;
 	
 	gpu_set_blendmode_ext(bm_one, bm_inv_src_alpha);
@@ -47,6 +49,8 @@ function export() {
 	
 	surface_save(_draw_surf, path);
 	clear_surf(_draw_surf);
+	
+	set_bottom_right_text("Exported as: \""+path+"\"", 2);
 }
 
 function export_layer() {
@@ -66,6 +70,8 @@ function export_layer() {
 	
 	surface_save(_draw_surf, path);
 	clear_surf(_draw_surf);
+	
+	set_bottom_right_text("Exported as: \""+path+"\"", 2);
 }
 
 function export_gif() {
@@ -82,4 +88,5 @@ function export_gif() {
 	}
 	
 	gif_save(g, path);
+	set_bottom_right_text("Exported as: \""+path+"\"", 2);
 }

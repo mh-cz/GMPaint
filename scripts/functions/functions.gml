@@ -40,6 +40,7 @@ function init() {
 	globalvar _pasted_selection;
 	globalvar _fpath;
 	globalvar _last_fpath;
+	globalvar _loaded_ext;
 	
 	globalvar _undo_counter;
 	globalvar _undo_list;
@@ -103,11 +104,11 @@ function init() {
 	cam_y = _paper_res.h/2;
 	cam_prev_mouse_pos = 0;
 	_zoom = 1;
-		
+	
 	_mouse = { x: 0, y: 0, xfloat: 0, yfloat: 0 };
 	last_click_pos = [0,0];
 	
-	draw_set_circle_precision(32);
+	draw_set_circle_precision(64);
 	
 	_mouse_over_gui = false;
 	_mouse_started_on_paper = false;
@@ -119,6 +120,7 @@ function init() {
 		
 	_filename = "";
 	_file_ext = ".gmp";
+	_loaded_ext = "";
 	_fpath = working_directory+"temp";
 	_last_fpath = "";
 	
