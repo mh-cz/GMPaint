@@ -38,9 +38,7 @@ function tool_fill() {
 		texture_set_stage(shader_get_sampler_index(shd_flood_fill, "img"), surface_get_texture(_layers[| _current_layer].s));
 		texture_set_stage(shader_get_sampler_index(shd_flood_fill, "area"), surface_get_texture(_area_surf));
 		
-		if _fill.n > 1 surface_copy(_fill.copy_surf, 0, 0, _mask_surf);
-		
-		repeat(50) {
+		repeat(25) {
 			surface_set_target(_fill.surf);
 			draw_surface(_mask_surf, 0, 0);
 			surface_reset_target();
@@ -49,11 +47,18 @@ function tool_fill() {
 			surface_reset_target();
 		}
 		
-		shader_reset();
-		
 		if _fill.n > 0 {
 			
 			if floor(_fill.n) % 2 == 1 {
+				
+				surface_copy(_fill.copy_surf, 0, 0, _mask_surf);
+			
+				surface_set_target(_fill.surf);
+				draw_surface(_mask_surf, 0, 0);
+				surface_reset_target();
+				surface_set_target(_mask_surf);
+				draw_surface(_fill.surf, 0, 0);
+				surface_reset_target();
 			
 				shader_set(shd_compare_surfaces);
 				texture_set_stage(shader_get_sampler_index(shd_compare_surfaces, "img1"), surface_get_texture(_fill.copy_surf));
@@ -81,6 +86,7 @@ function tool_fill() {
 			}
 		}
 		
+		shader_reset();
 		_fill.n++;
 	}
 	else if _fill.phase == 2 {

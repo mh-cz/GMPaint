@@ -18,7 +18,6 @@ function init() {
 	globalvar _cursor_spr;
 	globalvar _line;
 	globalvar _fill;
-	globalvar _pipette;
 	globalvar _mouse_over_gui;
 	globalvar _color_wheel;
 	globalvar _mouse_started_on_paper;
@@ -48,7 +47,7 @@ function init() {
 	
 	enum _tool { none = -1, brush = 0, line = 1, fill = 2, eraser = 3, pipette = 4, area_select = 5 };
 	
-	_language = "en";
+	_language = "cz";
 	
 	_paper_res = { w: 1280, h: 720 };
 	
@@ -78,8 +77,6 @@ function init() {
 	_fill = { surf: -1, comp_surf: -1, copy_surf: -1, find_col_surf: -1, one_px_surf: -1,
 			  tol: 10, phase: 0, start_col: [0,0,0,0], start_pos: [0,0], buf: -1, options_init: false };
 	
-	_pipette = { buf_list: ds_list_create() };
-	
 	_area_select = { mode: 0, start_pos: [0,0], mn: [0,0], mx: [0,0], copy_surf_size: [1,1], options_init: false };
 	_pasted_selection = { active: false, pos: [0,0], size: [0,0], rot: 0, placed: false, action: 0, mpos: [0,0] };
 	
@@ -102,7 +99,7 @@ function init() {
 	create_camera();
 	cam_x = _paper_res.w/2;
 	cam_y = _paper_res.h/2;
-	cam_prev_mouse_pos = 0;
+	cam_prev_mouse_pos = [];
 	_zoom = 1;
 	
 	_mouse = { x: 0, y: 0, xfloat: 0, yfloat: 0 };
@@ -134,7 +131,6 @@ function init() {
 	obj_editor.old = [_fpath, _filename];
 	
 	_undo_counter = 0;
-	_redo_counter = 0;
 	_undo_list = ds_list_create();
 	
 	// auto open from file extension
@@ -145,10 +141,8 @@ function init() {
 }
 
 function get_mouse_pos() {
-	_mouse.xfloat = device_mouse_x_to_gui(0) * _zoom + camera_get_view_x(view_camera[0]);
-	_mouse.yfloat = device_mouse_y_to_gui(0) * _zoom + camera_get_view_y(view_camera[0]);
-	_mouse.x = floor(_mouse.xfloat);
-	_mouse.y = floor(_mouse.yfloat);
+	_mouse.x = floor(device_mouse_x_to_gui(0) * _zoom + camera_get_view_x(view_camera[0]));
+	_mouse.y = floor(device_mouse_y_to_gui(0) * _zoom + camera_get_view_y(view_camera[0]));
 }
 
 function set_cursor(spr, img) {
