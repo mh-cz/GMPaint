@@ -6,7 +6,7 @@ function undo_save(action = "") {
 			_undo_counter = ds_list_size(_undo_list)-1;
 			var undo_buf = _undo_list[| _undo_counter];
 			
-			foreach ["b", 1, _undo_counter+1] in _undo_list as_list buffer_delete(b);
+			//foreach ["b", 1, _undo_counter+1] in _undo_list as_list buffer_delete(b);
 			
 			var bact = buffer_create(128, buffer_fixed, 1); // buffer action
 			var bl = buffer_create(_paper_res.w * _paper_res.h * 4, buffer_fixed, 1); // buffer layer

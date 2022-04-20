@@ -84,8 +84,18 @@ function export_gif() {
 	for(var i = 0; i < ds_list_size(_layers); i++) {
 		var l = _layers[| i];
 		if l.hidden continue;
-		gif_add_surface(g, l.s, 1/30);
+		
+		gpu_set_blendmode_ext(bm_one, bm_inv_src_alpha);
+		surface_set_target(_draw_surf);
+		draw_clear_alpha(c_black, 0);
+		draw_surface_ext(l.s, 0, 0, 1, 1, 0, make_color_hsv(0, 0, l.layer_alpha*255), l.layer_alpha);
+		surface_reset_target();
+		gpu_set_blendmode(bm_normal);
+		
+		gif_add_surface(g, _draw_surf, 1/30);
 	}
+	
+	clear_surf(_draw_surf);
 	
 	gif_save(g, path);
 	set_bottom_right_text("Exported as: \""+path+"\"", 2);

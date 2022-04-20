@@ -24,7 +24,6 @@ function layer_join_below(l) {
 function layer_join_all() {
 	
 	var num = ds_list_size(_layers)-1;
-	
 	for(var l = num; l > 0; l--) {
 		
 		var l_above = _layers[| l];
