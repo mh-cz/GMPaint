@@ -158,7 +158,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"spr_layer_icons","path":"sprites/spr_layer_icons/spr_layer_icons.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "spr_layer_icons",
     "tags": [],
     "resourceType": "GMSequence",

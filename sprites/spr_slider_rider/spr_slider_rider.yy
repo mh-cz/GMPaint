@@ -59,7 +59,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"spr_slider_rider","path":"sprites/spr_slider_rider/spr_slider_rider.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "spr_slider_rider",
     "tags": [],
     "resourceType": "GMSequence",

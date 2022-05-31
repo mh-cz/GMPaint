@@ -63,7 +63,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"spr_layer_visibility","path":"sprites/spr_layer_visibility/spr_layer_visibility.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "spr_layer_visibility",
     "tags": [],
     "resourceType": "GMSequence",

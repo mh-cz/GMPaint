@@ -59,7 +59,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"spr_toolbar_icon_ramecek","path":"sprites/spr_toolbar_icon_ramecek/spr_toolbar_icon_ramecek.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "spr_toolbar_icon_ramecek",
     "tags": [],
     "resourceType": "GMSequence",

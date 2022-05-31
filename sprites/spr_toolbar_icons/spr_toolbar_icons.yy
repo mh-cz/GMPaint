@@ -79,7 +79,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"spr_toolbar_icons","path":"sprites/spr_toolbar_icons/spr_toolbar_icons.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "spr_toolbar_icons",
     "tags": [],
     "resourceType": "GMSequence",

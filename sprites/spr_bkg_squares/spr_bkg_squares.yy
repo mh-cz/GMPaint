@@ -63,7 +63,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"spr_bkg_squares","path":"sprites/spr_bkg_squares/spr_bkg_squares.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "spr_bkg_squares",
     "tags": [],
     "resourceType": "GMSequence",

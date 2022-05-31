@@ -67,7 +67,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"spr_alpha","path":"sprites/spr_alpha/spr_alpha.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "spr_alpha",
     "tags": [],
     "resourceType": "GMSequence",

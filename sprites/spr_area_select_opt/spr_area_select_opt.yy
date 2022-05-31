@@ -67,7 +67,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"spr_area_select_opt","path":"sprites/spr_area_select_opt/spr_area_select_opt.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "spr_area_select_opt",
     "tags": [],
     "resourceType": "GMSequence",

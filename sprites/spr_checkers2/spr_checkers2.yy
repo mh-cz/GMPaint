@@ -59,7 +59,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"spr_checkers2","path":"sprites/spr_checkers2/spr_checkers2.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "spr_checkers2",
     "tags": [],
     "resourceType": "GMSequence",

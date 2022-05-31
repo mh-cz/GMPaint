@@ -59,7 +59,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"spr_hue","path":"sprites/spr_hue/spr_hue.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "spr_hue",
     "tags": [],
     "resourceType": "GMSequence",
